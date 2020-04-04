@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE tiles-definitions PUBLIC  
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"  
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<tiles-definitions>
+
+    <!-- Base Define -->
+    <definition name="base.definition" template="/WEB-INF/views/layouts/layout.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="header" value="/WEB-INF/views/layouts/header.jsp" />
+        <put-attribute name="menu" value="/WEB-INF/views/layouts/menu.jsp" />
+        <put-attribute name="body" value="" />
+        <put-attribute name="footer" value="/WEB-INF/views/layouts/footer.jsp" />
+        <put-attribute name="modal" value="modal.definition" />
+    </definition>
+
+    <definition name="modal.definition" template="/WEB-INF/views/layouts/modal.jsp"/>
+
+    <definition name="login" extends="base.definition">
+        <put-attribute name="menu" value="" />
+        <put-attribute name="title" value="Đăng nhập" />
+        <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
+    </definition>
+
+    <definition name="cart" extends="base.definition" preparer="cartPreparer">
+        <put-attribute name="title" value="Danh sách sản phẩm" />
+        <put-attribute name="body" value="/WEB-INF/views/cart.jsp" />
+    </definition>
+
+    <definition name="gift" extends="base.definition" preparer="giftPreparer">
+        <put-attribute name="title" value="Danh sách quà tặng" />
+        <put-attribute name="body" value="/WEB-INF/views/gift.jsp" />
+    </definition>
+
+    <definition name="product" extends="base.definition" preparer="productPreparer">
+        <put-attribute name="title" value="Quản lý sản phẩm" />
+        <put-attribute name="body" value="/WEB-INF/views/product.jsp" />
+    </definition>
+
+    <definition name="signup" extends="base.definition" preparer="userSignupPreparer">
+        <put-attribute name="title" value="Đăng ký" />
+        <put-attribute name="body" value="/WEB-INF/views/signup.jsp" />
+    </definition>
+
+    <definition name="history" extends="base.definition" preparer="historyPreparer">
+        <put-attribute name="title" value="Lịch sử mua hàng" />
+        <put-attribute name="body" value="/WEB-INF/views/history.jsp" />
+    </definition>
+    
+    <definition name="training" extends="base.definition" preparer="trainingPreparer">
+        <put-attribute name="title" value="Lịch sử mua hàng" />
+        <put-attribute name="body" value="/WEB-INF/views/training.jsp" />
+    </definition>
+
+</tiles-definitions> 
