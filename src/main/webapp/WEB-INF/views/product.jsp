@@ -59,6 +59,9 @@
                     <input type="file" class="custom-file-input form-control" id="file" name="file">
                     <label class="custom-file-label" for="customFile">Choose File</label>
                 </div>
+                <div class="form-group col-md-2">
+                    <a target="_blank" href="/resources/docs/ImportProduct.csv.zip"><spring:message code="lable.download.template" /></a>
+                </div>
             </div>
 
         </form>

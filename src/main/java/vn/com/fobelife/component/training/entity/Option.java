@@ -13,10 +13,10 @@ import lombok.Setter;
 import vn.com.fobelife.common.entity.BaseEntity;
 
 @Entity
-@Table(name = "ANSWERS", indexes = { @Index(columnList = "CODE", unique = true) })
+@Table(name = "OPTIONS", indexes = { @Index(columnList = "CODE", unique = true) })
 @Getter
 @Setter
-public class Answer extends BaseEntity {
+public class Option extends BaseEntity {
 
     /**
      * 

@@ -22,8 +22,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
         log.info("***** Authenticate Provider");
         Object name = authentication.getName();
         Object password = authentication.getCredentials();
-        boolean abc = true;
-        if (abc) {
+        if ("admin".equals(name) && "admin@123".equals(password)) {
             Authentication authentication1 = new UsernamePasswordAuthenticationToken(name, password, getRoles(name.toString()));
             SecurityContextHolder.getContext().setAuthentication(authentication1);
             return authentication1;

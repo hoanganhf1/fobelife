@@ -11,7 +11,7 @@
         </sec:authorize>
         <li class="nav-item ${currentPage eq 'history' ? 'active' : ''}"><a class="nav-link" href="/cart/history"><spring:message
                     code="label.menu.history" /></a></li>
-        <li class="nav-item ${currentPage eq 'news' ? 'active' : ''}"><a class="nav-link" href="/news"><spring:message
+        <li class="nav-item ${currentPage eq 'news' ? 'active' : ''}"><a class="nav-link" href="#"><spring:message
                     code="label.menu.news" /></a></li>
         <li class="nav-item ${currentPage eq 'training' ? 'active' : ''}"><a class="nav-link" href="/training"><spring:message
                     code="label.menu.training" /></a></li>

@@ -3,9 +3,7 @@
  */
 package vn.com.fobelife.component.user.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -16,14 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
-import vn.com.fobelife.component.user.dto.RoleDto;
 import vn.com.fobelife.component.user.dto.UserDto;
-import vn.com.fobelife.component.user.entity.Role;
 import vn.com.fobelife.component.user.entity.User;
-import vn.com.fobelife.component.user.entity.UserRole;
-import vn.com.fobelife.component.user.repository.RoleRepository;
 import vn.com.fobelife.component.user.repository.UserRepository;
-import vn.com.fobelife.component.user.repository.UserRoleRepository;
 import vn.com.fobelife.component.user.service.UserService;
 
 /**
@@ -39,12 +32,6 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepo;
 
     @Autowired
-    private UserRoleRepository userRoleRepo;
-
-    @Autowired
-    private RoleRepository roleRepo;
-
-    @Autowired
     private PasswordEncoder passEncode;
 
     @Override
@@ -58,15 +45,6 @@ public class UserServiceImpl implements UserService {
         user.setActive(true);
         user.setPoint(0);
         user = userRepo.save(user);
-        List<UserRole> userRoles = new ArrayList<>();
-        for(RoleDto r : userDto.getRoles()) {
-            Role role = roleRepo.findByName(r.getName());
-            UserRole userRole = new UserRole();
-            userRole.setUser(user);
-            userRole.setRole(role);
-            userRoles.add(userRole);
-        }
-        userRoleRepo.saveAll(userRoles);
         return Boolean.TRUE;
     }
 
@@ -83,45 +61,31 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByEmail(String email) throws Exception {
         User user = userRepo.findByEmailAndActiveIsTrue(email);
-        List<UserRole> userRoles = userRoleRepo.findByUser(user);
-        return applyDto(user, userRoles);
+        return applyDto(user);
     }
 
-    private UserDto applyDto(User user, List<UserRole> roles) {
+    private UserDto applyDto(User user) {
         UserDto dto = new UserDto();
         dto.setEmail(user.getEmail());
         dto.setUsername(user.getUsername());
-        dto.setRoles(applyDto(roles));
         dto.setPoint(user.getPoint());
         return dto;
-    }
-
-    private RoleDto applyDto(Role role) {
-        RoleDto dto = new RoleDto();
-        dto.setName(role.getName());
-        dto.setDescription(role.getDescription());
-        return dto;
-    }
-
-    private List<RoleDto> applyDto(List<UserRole> roles) {
-        List<RoleDto> dtos = new ArrayList<>();
-        roles.forEach(r -> dtos.add(applyDto(r.getRole())));
-        return dtos;
     }
 
     @Override
     @Transactional(readOnly = false)
     public Boolean updateLoginDate(String username) throws Exception {
         User user = userRepo.findByUsername(username);
-        user.setLastLoginDate(new Date());
-        userRepo.save(user);
+        if (user != null) {
+            user.setLastLoginDate(new Date());
+            userRepo.save(user);
+        }
         return Boolean.TRUE;
     }
 
     @Override
     public UserDto findByUsername(String username) throws Exception {
         User user = userRepo.findByUsername(username);
-        List<UserRole> userRoles = userRoleRepo.findByUser(user);
-        return applyDto(user, userRoles);
+        return applyDto(user);
     }
 }

@@ -27,8 +27,8 @@ public class Question extends BaseEntity {
     @Column(name = "CODE")
     private String code;
 
-    @Column(name = "QUESTION")
-    private String question;
+    @Column(name = "CONTENT")
+    private String content;
 
     @Column(name = "ANSWER")
     private String answer;
@@ -40,5 +40,5 @@ public class Question extends BaseEntity {
     private Integer ordinal;
 
     @OneToMany(mappedBy = "question")
-    private Collection<Answer> answers;
+    private Collection<Option> options;
 }

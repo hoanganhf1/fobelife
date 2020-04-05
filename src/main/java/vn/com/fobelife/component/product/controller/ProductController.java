@@ -60,6 +60,6 @@ public class ProductController {
         } catch (Exception e) {
             log.error("***** Import products", e);
         }
-        return "product";
+        return "redirect:/product";
     }
 }

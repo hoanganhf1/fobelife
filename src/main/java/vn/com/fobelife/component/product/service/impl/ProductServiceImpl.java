@@ -17,6 +17,7 @@ import vn.com.fobelife.component.product.dto.ProductDto;
 import vn.com.fobelife.component.product.entity.Product;
 import vn.com.fobelife.component.product.repository.ProductRepository;
 import vn.com.fobelife.component.product.service.ProductService;
+import vn.com.fobelife.component.product.service.model.ProductImportModel;
 
 @Service
 @Transactional(readOnly = true)
@@ -81,7 +82,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> getByStatusAndType(String status, String type) throws Exception {
         List<ProductDto> productDtos = new ArrayList<ProductDto>();
-        proRepo.findByStatusAndTypeOrderByPriceAsc(status, type.toUpperCase()).forEach(p -> productDtos.add(applyDto(p)));
+        proRepo.findByStatusAndTypeOrderByPriceAsc(status, type.toUpperCase())
+                .forEach(p -> productDtos.add(applyDto(p)));
         return productDtos;
     }
 
@@ -92,24 +94,27 @@ public class ProductServiceImpl implements ProductService {
         String[] line;
         boolean isFirstLine = true;
         while ((line = reader.readNext()) != null) {
-            ProductImportModel model = new ProductImportModel(line);
-            if (!isFirstLine) {
-                Product product = proRepo.findByCode(model.getCode());
-                if (product == null) {
-                    product = new Product();
-                    product.setCode(model.getCode());
-                    product.setStatus("ACTIVE");
-                }
-                product.setImage(model.getImage());
-                product.setName(model.getName());
-                product.setDescription(model.getDescription());
-                product.setPrice(model.getPrice());
-                product.setType(model.getType());
-                product = proRepo.save(product);
+
+            if (isFirstLine) {
+                isFirstLine = false;
+                continue;
             }
-            isFirstLine = false;
+            ProductImportModel model = new ProductImportModel(line);
+            Product product = proRepo.findByCode(model.getCode());
+            if (product == null) {
+                product = new Product();
+                product.setCode(model.getCode());
+                product.setStatus("ACTIVE");
+            }
+            product.setImage(model.getImage());
+            product.setName(model.getName());
+            product.setDescription(model.getDescription());
+            product.setPrice(model.getPrice());
+            product.setType(model.getType());
+            product = proRepo.save(product);
+
         }
         reader.close();
-        
+
     }
 }

@@ -49,7 +49,7 @@
     </definition>
     
     <definition name="training" extends="base.definition" preparer="trainingPreparer">
-        <put-attribute name="title" value="Lịch sử mua hàng" />
+        <put-attribute name="title" value="Training" />
         <put-attribute name="body" value="/WEB-INF/views/training.jsp" />
     </definition>
 

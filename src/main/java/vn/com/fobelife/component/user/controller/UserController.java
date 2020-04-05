@@ -41,7 +41,7 @@ public class UserController {
         } catch (Exception e) {
             log.error("Create user: ", e);
         }
-        return "cart";
+        return "redirect:/user/signup";
     }
 
     @GetMapping("/login")

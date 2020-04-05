@@ -104,7 +104,7 @@
                         <div class="totals-value"><input style="margin-left: -0.8rem; " value="COD" type="radio" class="form-check-input" name="type"></div>
                     </div>
                 </div>
-        
+
                 <button class="checkout" id="checkout-cart">
                     <spring:message code="btn.checkout" />
                 </button>
