@@ -5,6 +5,8 @@ import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Index;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -39,6 +41,11 @@ public class Question extends BaseEntity {
     @Column(name = "ORDINAL")
     private Integer ordinal;
 
+    @ManyToOne
+    @JoinColumn(name = "COURSE_ID")
+    private Course course;
+
     @OneToMany(mappedBy = "question")
     private Collection<Option> options;
+
 }

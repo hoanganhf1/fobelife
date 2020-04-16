@@ -30,8 +30,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info("***** Load User by {} *****", username);
-        
-        User user = userRepo.findByUsername(username);
+        User user = userRepo.findByUsernameAndActiveIsTrue(username);
         List<GrantedAuthority> authorities = new ArrayList<>();
         authorities.addAll(getRoles(user.getEmail()));
         UserDetails userDetails = buildUserDetails(user.getUsername(), user.getPassword(), authorities);

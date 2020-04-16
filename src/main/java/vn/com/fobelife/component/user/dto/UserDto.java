@@ -21,4 +21,13 @@ public class UserDto {
     private String username;
     private List<RoleDto> roles;
     private Integer point;
+
+    public UserDto() {
+        
+    }
+
+    public UserDto(String admin) {
+        this.username = admin;
+        this.point = 0;
+    }
 }

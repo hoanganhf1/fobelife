@@ -15,7 +15,7 @@
         <put-attribute name="modal" value="modal.definition" />
     </definition>
 
-    <definition name="modal.definition" template="/WEB-INF/views/layouts/modal.jsp"/>
+    <definition name="modal.definition" template="/WEB-INF/views/layouts/modal.jsp" />
 
     <definition name="login" extends="base.definition">
         <put-attribute name="menu" value="" />
@@ -47,10 +47,21 @@
         <put-attribute name="title" value="Lịch sử mua hàng" />
         <put-attribute name="body" value="/WEB-INF/views/history.jsp" />
     </definition>
-    
+
     <definition name="training" extends="base.definition" preparer="trainingPreparer">
         <put-attribute name="title" value="Training" />
-        <put-attribute name="body" value="/WEB-INF/views/training.jsp" />
+        <put-attribute name="body" value="/WEB-INF/views/course/training.jsp" />
     </definition>
 
+    <definition name="course" extends="base.definition" preparer="coursePreparer">
+        <put-attribute name="title" value="Training" />
+        <put-attribute name="body" value="/WEB-INF/views/course/course.jsp" />
+    </definition>
+
+    <definition name="management" extends="base.definition">
+        <put-attribute name="title" value="Training" />
+        <put-attribute name="body" value="/WEB-INF/views/management.jsp" />
+    </definition>
+
+    <definition name="news" template="/WEB-INF/views/news.jsp" preparer="newsPreparer" />
 </tiles-definitions> 

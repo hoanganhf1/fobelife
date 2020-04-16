@@ -13,6 +13,7 @@ public class ProductImportModel {
     private String type;
     private Integer price;
     private String description;
+    private String status;
 
     public ProductImportModel(String[] properties) {
         this.code = properties[0];
@@ -21,6 +22,7 @@ public class ProductImportModel {
         this.description = properties[3];
         this.price = NumberUtils.toInt(properties[4]);
         this.type = properties[5].toUpperCase();
+        this.status = properties[6].toLowerCase();
     }
 
 }

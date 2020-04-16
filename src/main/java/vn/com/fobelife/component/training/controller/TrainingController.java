@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,13 +24,20 @@ import vn.com.fobelife.component.training.service.TrainingService;
 @RequestMapping("/training")
 @Slf4j
 public class TrainingController {
-    
+
     @Autowired
     private TrainingService service;
 
     @GetMapping
-    public String getTraining(HttpServletRequest req, HttpServletResponse rep) {
+    public String getCourse(HttpServletRequest req, HttpServletResponse rep) {
+        log.info("***** course *****");
+        return "course";
+    }
+
+    @GetMapping("/{code}")
+    public String getTraining(@PathVariable String code, HttpServletRequest req, HttpServletResponse rep) {
         log.info("***** training *****");
+        req.setAttribute("courseCode", code);
         return "training";
     }
 

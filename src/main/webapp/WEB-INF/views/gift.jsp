@@ -17,15 +17,17 @@
         <table id="giftTable" class="table table-striped table-bordered" style="width: 100%">
             <thead>
                 <tr>
+                    <th style="width: auto"><spring:message code="label.gift.code" /></th>
                     <th style="width: 100px"><spring:message code="label.gift.image" /></th>
-                    <th><spring:message code="label.gift.name" /></th>
-                    <th><spring:message code="label.gift.point" /></th>
-                    <th style="width: 1px"><spring:message code="label.gift.submit" /></th>
+                    <th style="width: auto"><spring:message code="label.gift.name" /></th>
+                    <th style="width: auto"><spring:message code="label.gift.point" /></th>
+                    <th style="width: auto"><spring:message code="label.gift.submit" /></th>
                 </tr>
             </thead>
             <tbody>
                 <c:forEach items="${mGift.data}" var="product">
                     <tr>
+                        <td>${product.code }</td>
                         <td><img width="100px" src="${product.image}"></td>
                         <td>${product.name}</td>
                         <td>${product.price}</td>
@@ -41,6 +43,7 @@
             </tbody>
             <tfoot>
                 <tr>
+                    <th><spring:message code="label.gift.code" /></th>
                     <th><spring:message code="label.gift.image" /></th>
                     <th><spring:message code="label.gift.name" /></th>
                     <th><spring:message code="label.gift.point" /></th>

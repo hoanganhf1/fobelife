@@ -13,13 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.opencsv.CSVReader;
 
+import vn.com.fobelife.component.training.dto.CourseDto;
 import vn.com.fobelife.component.training.dto.OptionDto;
 import vn.com.fobelife.component.training.dto.QuestionDto;
+import vn.com.fobelife.component.training.entity.Course;
 import vn.com.fobelife.component.training.entity.Option;
 import vn.com.fobelife.component.training.entity.Question;
+import vn.com.fobelife.component.training.repository.CourseRepository;
 import vn.com.fobelife.component.training.repository.OptionRepository;
 import vn.com.fobelife.component.training.repository.QuestionRepository;
 import vn.com.fobelife.component.training.service.TrainingService;
+import vn.com.fobelife.component.training.service.model.CourseImportModel;
 import vn.com.fobelife.component.training.service.model.TrainingImportModel;
 import vn.com.fobelife.component.user.entity.User;
 import vn.com.fobelife.component.user.entity.UserQuestion;
@@ -42,16 +46,30 @@ public class TrainingServiceImpl implements TrainingService {
     @Autowired
     private UserQuestionRepository uqRepo;
 
+    @Autowired
+    private CourseRepository courseRepo;
+
     @Override
     @Transactional(readOnly = false)
     public void importTraining(String csvContent) throws Exception {
         CSVReader reader = new CSVReader(new StringReader(csvContent));
         String[] line;
-        boolean isFirstLine = true;
+        int lineNumber = 1;
+        Course course = null;
         Question q = null;
         while ((line = reader.readNext()) != null) {
-            if (isFirstLine) {
-                isFirstLine = false;
+            if (lineNumber == 1 || lineNumber == 3) {
+                lineNumber++;
+                continue;
+            }
+            if (lineNumber == 2) {
+                CourseImportModel model = new CourseImportModel(line);
+                course = courseRepo.findByCode(model.getCode()).orElse(new Course());
+                course.setName(model.getName());
+                course.setStatus(model.getStatus());
+                course.setCode(model.getCode());
+                course = courseRepo.save(course);
+                lineNumber++;
                 continue;
             }
             TrainingImportModel model = new TrainingImportModel(line);
@@ -61,6 +79,7 @@ public class TrainingServiceImpl implements TrainingService {
                 q.setContent(model.getContent());
                 q.setAnswer(model.getAnwser());
                 q.setStatus(model.getStatus());
+                q.setCourse(course);
                 q = qRepo.save(q);
             } else {
                 String oCode = q.getCode() + "-" + model.getOptionCode();
@@ -78,10 +97,11 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    public List<QuestionDto> getByCurrentUser() throws Exception {
+    public List<QuestionDto> getByCurrentUser(String courseCode) throws Exception {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepo.findByUsername(username);
-        Iterable<Question> questions = qRepo.findAll();
+        Course course = courseRepo.findByCode(courseCode).get();
+        Iterable<Question> questions = qRepo.findByStatusAndCourse("ACTIVE", course);
         List<QuestionDto> dtos = new ArrayList<>();
         questions.forEach(q -> {
             UserQuestion uq = uqRepo.findByUserAndQuestion(user, q).orElse(new UserQuestion());
@@ -146,6 +166,19 @@ public class TrainingServiceImpl implements TrainingService {
         User user = userRepo.findByUsername(username);
         List<UserQuestion> uqList = uqRepo.findByUserAndPassed(user, result);
         return uqList.size();
+    }
+
+    @Override
+    public List<CourseDto> getCourses() throws Exception {
+        List<CourseDto> dtos = new ArrayList<>();
+        List<Course> courses = courseRepo.findByStatus("ACTIVE");
+        courses.stream().forEach(c -> {
+            CourseDto dto = new CourseDto();
+            dto.setCode(c.getCode());
+            dto.setName(c.getName());
+            dtos.add(dto);
+        });
+        return dtos;
     }
 
 }

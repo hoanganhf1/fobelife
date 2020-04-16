@@ -27,7 +27,7 @@ public class TrainingPreparer extends AbstractViewPreparer {
         try {
             HttpServletRequest req = getServletRequest(tilesContext);
             TrainingModel model = getModel(req, TrainingModel.NAME, TrainingModel.class);
-            List<QuestionDto> data = trainingService.getByCurrentUser();
+            List<QuestionDto> data = trainingService.getByCurrentUser(String.valueOf(req.getAttribute("courseCode")));
             req.setAttribute("currentPage", "training");
             model.setData(data);
             model.setNumberOfPassed(trainingService.countResult(Boolean.TRUE));

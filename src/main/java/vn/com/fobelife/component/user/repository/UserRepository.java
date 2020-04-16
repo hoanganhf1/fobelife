@@ -15,5 +15,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByEmailAndActiveIsTrue(String email);
     User findByEmail(String email);
+    User findByUsernameAndActiveIsTrue(String username);
     User findByUsername(String username);
 }

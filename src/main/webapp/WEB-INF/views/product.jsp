@@ -63,7 +63,6 @@
                     <a target="_blank" href="/resources/docs/ImportProduct.csv.zip"><spring:message code="lable.download.template" /></a>
                 </div>
             </div>
-
         </form>
     </div>
 </div>

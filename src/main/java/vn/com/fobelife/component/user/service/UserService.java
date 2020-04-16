@@ -15,4 +15,5 @@ public interface UserService {
     UserDto getUserByEmail(String email) throws Exception;
     UserDto findByUsername(String username) throws Exception;
     Boolean updateLoginDate(String email) throws Exception;
+    void importUser(String csvContent) throws Exception;
 }

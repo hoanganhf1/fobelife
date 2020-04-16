@@ -3,6 +3,7 @@
  */
 package vn.com.fobelife.component.user.service.impl;
 
+import java.io.StringReader;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.opencsv.CSVReader;
+
 import lombok.extern.slf4j.Slf4j;
 import vn.com.fobelife.component.user.dto.UserDto;
 import vn.com.fobelife.component.user.entity.User;
 import vn.com.fobelife.component.user.repository.UserRepository;
+import vn.com.fobelife.component.user.service.UserImportModel;
 import vn.com.fobelife.component.user.service.UserService;
 
 /**
@@ -52,8 +56,9 @@ public class UserServiceImpl implements UserService {
     public UserDto getCurrent() throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && !(authentication instanceof AnonymousAuthenticationToken)) {
-            String currentUserName = authentication.getName();
-            return findByUsername(currentUserName);
+            String user = authentication.getName();
+            
+            return "admin".equals(user) ? new UserDto("admin") : findByUsername(user);
         }
         return null;
     }
@@ -87,5 +92,32 @@ public class UserServiceImpl implements UserService {
     public UserDto findByUsername(String username) throws Exception {
         User user = userRepo.findByUsername(username);
         return applyDto(user);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void importUser(String csvContent) throws Exception {
+        CSVReader reader = new CSVReader(new StringReader(csvContent));
+        String[] line;
+        boolean isFirstLine = true;
+        while ((line = reader.readNext()) != null) {
+
+            if (isFirstLine) {
+                isFirstLine = false;
+                continue;
+            }
+            UserImportModel model = new UserImportModel(line);
+            User user = userRepo.findByUsername(model.getUsername());
+            if (user == null) {
+                user = new User();
+                user.setUsername(model.getUsername());
+                user.setPoint(0);
+            }
+            user.setEmail(model.getEmail());
+            user.setPassword(passEncode.encode(model.getPassword()));
+            user.setActive("ACTIVE".equalsIgnoreCase(model.getStatus()));
+            user = userRepo.save(user);
+        }
+        reader.close();
     }
 }

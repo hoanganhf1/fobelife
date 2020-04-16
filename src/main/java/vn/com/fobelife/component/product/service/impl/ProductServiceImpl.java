@@ -104,8 +104,8 @@ public class ProductServiceImpl implements ProductService {
             if (product == null) {
                 product = new Product();
                 product.setCode(model.getCode());
-                product.setStatus("ACTIVE");
             }
+            product.setStatus(model.getStatus());
             product.setImage(model.getImage());
             product.setName(model.getName());
             product.setDescription(model.getDescription());

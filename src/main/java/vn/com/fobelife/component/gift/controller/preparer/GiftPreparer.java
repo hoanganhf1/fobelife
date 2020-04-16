@@ -22,7 +22,7 @@ public class GiftPreparer extends AbstractViewPreparer {
 
     @Autowired
     private ProductService proService;
-    
+
     @Autowired
     private UserService userService;
 

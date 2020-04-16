@@ -19,7 +19,7 @@
 
         <!-- Remind Password -->
         <div id="formFooter">
-            <span class="invisible">Invalid email/password</span>
+            <span><spring:message code="login.label.info" /></span>
         </div>
 
     </div>

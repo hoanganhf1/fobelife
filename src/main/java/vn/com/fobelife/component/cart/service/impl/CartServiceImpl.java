@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import lombok.extern.slf4j.Slf4j;
 import vn.com.fobelife.component.cart.dto.OrderDto;
 import vn.com.fobelife.component.cart.dto.OrderItemDto;
 import vn.com.fobelife.component.cart.dto.OrderReturnDto;
@@ -31,6 +32,7 @@ import vn.com.fobelife.component.user.repository.UserRepository;
 
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class CartServiceImpl implements CartService {
 
     @Autowired
@@ -95,6 +97,7 @@ public class CartServiceImpl implements CartService {
     }
 
     private void sendEmail(String code, String message) {
+        try {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userRepo.findByUsername(username);
 
@@ -104,6 +107,9 @@ public class CartServiceImpl implements CartService {
         mailMessage.setText(message);
 
         mailSender.send(mailMessage);
+        } catch (Exception e) {
+            log.error("***** Cant send email: ", e);
+        }
     }
 
     private OrderDto applyOrderDto(Order entity) {

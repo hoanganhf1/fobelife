@@ -18,7 +18,7 @@ import vn.com.fobelife.common.entity.BaseEntity;
  */
 @Entity
 @Table(name = "USERS", 
-    indexes = {@Index(columnList = "EMAIL", unique = true), @Index(columnList = "USER_NAME", unique = true)})
+    indexes = {@Index(columnList = "USER_NAME", unique = true)})
 @Getter
 @Setter
 public class User extends BaseEntity {

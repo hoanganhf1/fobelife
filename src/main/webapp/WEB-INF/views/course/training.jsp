@@ -1,23 +1,4 @@
 <%@ include file="/WEB-INF/views/layouts/tagLibs.jsp"%>
-<sec:authorize access="hasAuthority('ADMIN')">
-    <link rel="stylesheet" href="/resources/css/product.css">
-    <div class="container" style="margin-top: 100px;">
-        <form method="post" action="/training/import" enctype="multipart/form-data">
-            <div class="form-row">
-                <div class="form-group col-md-2">
-                    <button id="btnImport" name="btnImport" type="submit" class="btn btn-primary form-control">Import</button>
-                </div>
-                <div class="custom-file form-group col-md-5">
-                    <input type="file" class="custom-file-input form-control" id="file" name="file"> <label class="custom-file-label"
-                        for="customFile">Choose File</label>
-                </div>
-                <div class="form-group col-md-2">
-                    <a target="_blank" href="/resources/docs/ImportTraining.csv.zip"><spring:message code="lable.download.template" /></a>
-                </div>
-            </div>
-        </form>
-    </div>
-</sec:authorize>
 <div class="container" style="padding-top: 50px;">
     <h5>
         <spring:message code="label.training.numberOfPassed" />${mTraining.numberOfPassed}</h5>
