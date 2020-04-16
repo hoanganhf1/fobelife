@@ -60,6 +60,6 @@ public class ProductController {
         } catch (Exception e) {
             log.error("***** Import products", e);
         }
-        return "redirect:/product";
+        return "redirect:/cart/fobelife";
     }
 }
