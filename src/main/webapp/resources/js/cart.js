@@ -16,10 +16,24 @@ function recalculateCart() {
     });
     $('#cart-total').html(total);
     $('.cart-total').val(total);
+    if (total > 0) {
+        $('#cart-review').prop('disabled', false);
+    } else {
+        $('#cart-review').prop('disabled', true);
+    }
 }
 
 function formatMoney(n) {
     return n.toFixed(0).replace(/./g, function(c, i, a) {
         return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
+    });
+}
+
+function reviewCart() {
+    $('#cartTable > tbody > tr').each(function(index, tr) {
+        var linePrice = $(this).find('.product-line-price').text();
+        if (linePrice > 0) {
+            
+        }
     });
 }

@@ -3,6 +3,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         $('#cartTable').DataTable();
+        $('#cart-review').click(function() {
+            reviewCart();
+        });
     });
 </script>
 <div class="main fadeInDown">
@@ -16,14 +19,14 @@
                             <th style="width: 100px"><spring:message code="label.product.image" /></th>
                             <th style="width: auto"><spring:message code="label.product.name" /></th>
                             <th style="width: auto"><spring:message code="label.product.price" /></th>
-                            <th style="width: auto"><spring:message code="label.product.quantity" /></th>
-                            <th style="width: auto"><spring:message code="label.product.total" /></th>
+                            <th style="width: 100px"><spring:message code="label.product.quantity" /></th>
+                            <th style="width: 100px"><spring:message code="label.product.total" /></th>
                         </tr>
                     </thead>
                     <tbody>
                         <c:forEach items="${mProduct.data}" var="product">
                             <tr>
-                                <td>${product.code }</td>
+                                <td><div class="product-code">${product.code }</div></td>
                                 <td><img width="100px" src="${product.image}"></td>
                                 <td>
                                     <div class="product-details">
@@ -81,10 +84,15 @@
                 </div>
             </div>
 
-            <button class="checkout" id="checkout-cart">
-                <spring:message code="btn.checkout" />
+<!--             <button class="checkout" id="checkout-cart"> -->
+<%--                 <spring:message code="btn.checkout" /> --%>
+<!--             </button> -->
+            <!-- Button trigger modal -->
+            <button disabled id="cart-review" type="button" class="checkout btn btn-primary" data-toggle="modal" data-target="#cartReview">
+                <spring:message code="btn.cart.review" />
             </button>
         </form>
     </div>
 </div>
+<tiles:insertAttribute name="review" />
 <script src="/resources/js/cart.js"></script>
