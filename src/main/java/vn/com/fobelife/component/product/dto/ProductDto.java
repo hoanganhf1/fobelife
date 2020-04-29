@@ -20,4 +20,8 @@ public class ProductDto {
     private String type;
 
     private String status;
+
+    private Integer quantity = 0;
+
+    private String total = "0";
 }

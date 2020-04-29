@@ -13,19 +13,26 @@
         <put-attribute name="body" value="" />
         <put-attribute name="footer" value="/WEB-INF/views/layouts/footer.jsp" />
         <put-attribute name="modal" value="modal.definition" />
+        <put-attribute name="liveChat" value="live.chat" />
     </definition>
 
-    <definition name="modal.definition" template="/WEB-INF/views/layouts/modal.jsp" />
+    <definition name="live.chat" template="/WEB-INF/views/layouts/liveChat.jsp" />
+    <definition name="modal.definition" template="/WEB-INF/views/layouts/modalConfirmation.jsp" />
 
     <definition name="login" extends="base.definition">
         <put-attribute name="menu" value="" />
         <put-attribute name="title" value="Đăng nhập" />
         <put-attribute name="body" value="/WEB-INF/views/login.jsp" />
+        <put-attribute name="modal" value="" />
+        <put-attribute name="liveChat" value="" />
     </definition>
 
     <definition name="cart" extends="base.definition" preparer="cartPreparer">
         <put-attribute name="title" value="Danh sách sản phẩm" />
-        <put-attribute name="body" value="/WEB-INF/views/cart.jsp" />
+        <put-attribute name="body" value="cart.definition" />
+    </definition>
+    <definition name="cart.definition" template="/WEB-INF/views/cart.jsp">
+        <put-attribute name="review" value="/WEB-INF/views/cartReview.jsp" />
     </definition>
 
     <definition name="gift" extends="base.definition" preparer="giftPreparer">

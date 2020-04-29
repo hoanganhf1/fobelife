@@ -128,7 +128,7 @@ public class CartServiceImpl implements CartService {
             }
             dto.setItemsAsString(itemsAsString);
         }
-        dto.setCreatedDate(new SimpleDateFormat("EEE, dd-MMM-yyyy").format(entity.getCreatedDate()));
+        dto.setCreatedDate(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").format(entity.getCreatedDate()));
         return dto;
     }
 

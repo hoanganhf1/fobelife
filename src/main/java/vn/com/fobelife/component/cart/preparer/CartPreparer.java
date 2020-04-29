@@ -3,6 +3,7 @@
  */
 package vn.com.fobelife.component.cart.preparer;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 
 import lombok.extern.slf4j.Slf4j;
 import vn.com.fobelife.common.tiles.AbstractViewPreparer;
+import vn.com.fobelife.component.cart.dto.OrderItemDto;
 import vn.com.fobelife.component.product.controller.model.ProductModel;
 import vn.com.fobelife.component.product.dto.ProductDto;
 import vn.com.fobelife.component.product.service.ProductService;
@@ -35,7 +37,19 @@ public class CartPreparer extends AbstractViewPreparer {
             HttpServletRequest req = getServletRequest(tilesContext);
             ProductModel model = getModel(req, ProductModel.NAME, ProductModel.class);
             String type = String.valueOf(req.getAttribute("type"));
-            List<ProductDto> data = proService.getByStatusAndType("ACTIVE", type);
+            List<ProductDto> data = new ArrayList<>();
+            if ("review".equalsIgnoreCase(type)) {
+                List<OrderItemDto> items = (List<OrderItemDto>)req.getAttribute("items");
+                for (OrderItemDto i : items) {
+                    ProductDto p = proService.getByCode(i.getProductCode());
+                    p.setQuantity(i.getQuantity());
+                    p.setTotal(i.getTotal());
+                    data.add(p);
+                }
+                model.setTotal(String.valueOf(req.getAttribute("orderTotal")));
+            } else {
+                data = proService.getByStatusAndType("ACTIVE", type);
+            }
             model.setPageType(type);
             model.setData(data);
             req.setAttribute("currentPage", type);

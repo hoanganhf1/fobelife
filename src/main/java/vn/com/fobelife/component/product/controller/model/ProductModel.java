@@ -14,4 +14,5 @@ public class ProductModel {
 
     private String pageType;
     private List<ProductDto> data;
+    private String total = "0";
 }

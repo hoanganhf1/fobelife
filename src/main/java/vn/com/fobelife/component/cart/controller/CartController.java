@@ -77,56 +77,63 @@ public class CartController {
     public String checkout(@ModelAttribute CheckoutForm model, HttpServletRequest req, HttpServletResponse rep) {
         log.info("***** Check out *****");
         String redirectUrl = "/cart/history";
-        try {
-            OrderDto dto = new OrderDto();
-            dto.setTotal(model.getCartTotal());
-            dto.setItems(getItems(model));
-            dto.setType(model.getType());
-            dto.setStatus("ORDERED");
-            dto.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-            dto = cartService.createOrder(dto);
-            if ("visa".equalsIgnoreCase(model.getType())) {
-
-                redirectUrl = nganluongUrl 
-                        + "?merchant_site_code=" + merchantSiteCode 
-                        + "&return_url=" + returnUrl 
-                        + "&receiver=" + receiver
-                        + "&transaction_info=" + dto.getTransactionInfo()
-                        + "&order_code=" + dto.getCode()
-                        + "&price=" + dto.getTotal()
-                        + "&currency=vnd"
-                        + "&quantity=1"
-                        + "&tax=0"
-                        + "&discount=0"
-                        + "&fee_cal=0"
-                        + "&fee_shipping=0"
-                        + "&order_description=order description"
-                        + "&buyer_info=" + dto.getUsername()
-                        + "&affiliate_code=affiliate_code"
-                        + "&lang=vi"
-                        + "&secure_code=" + DigestUtils.md5DigestAsHex(
-                                                String.join(StringUtils.SPACE, 
-                                                        merchantSiteCode,
-                                                        returnUrl,
-                                                        receiver,
-                                                        dto.getTransactionInfo(),
-                                                        dto.getCode(),
-                                                        dto.getTotal(),
-                                                        "vnd", // currency
-                                                        "1", //quantity
-                                                        "0", //tax
-                                                        "0", //discount
-                                                        "0", //fee_cal
-                                                        "0", // fee_shipping
-                                                        "order description", //order description
-                                                        dto.getUsername(), // buyer info
-                                                        "affiliate_code", //affiliate_code
-                                                        securePass
-                                                        ).getBytes())
-                        + "&cancel_url=" + cancelUrl;
+        if (StringUtils.isNotBlank(model.getPaymentType())) {
+            try {
+                OrderDto dto = new OrderDto();
+                dto.setTotal(model.getCartTotal());
+                dto.setItems(getItems(model));
+                dto.setType(model.getPaymentType());
+                dto.setStatus("ORDERED");
+                dto.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+                dto = cartService.createOrder(dto);
+                if ("visa".equalsIgnoreCase(model.getPaymentType())) {
+    
+                    redirectUrl = nganluongUrl 
+                            + "?merchant_site_code=" + merchantSiteCode 
+                            + "&return_url=" + returnUrl 
+                            + "&receiver=" + receiver
+                            + "&transaction_info=" + dto.getTransactionInfo()
+                            + "&order_code=" + dto.getCode()
+                            + "&price=" + dto.getTotal()
+                            + "&currency=vnd"
+                            + "&quantity=1"
+                            + "&tax=0"
+                            + "&discount=0"
+                            + "&fee_cal=0"
+                            + "&fee_shipping=0"
+                            + "&order_description=order description"
+                            + "&buyer_info=" + dto.getUsername()
+                            + "&affiliate_code=affiliate_code"
+                            + "&lang=vi"
+                            + "&secure_code=" + DigestUtils.md5DigestAsHex(
+                                                    String.join(StringUtils.SPACE, 
+                                                            merchantSiteCode,
+                                                            returnUrl,
+                                                            receiver,
+                                                            dto.getTransactionInfo(),
+                                                            dto.getCode(),
+                                                            dto.getTotal(),
+                                                            "vnd", // currency
+                                                            "1", //quantity
+                                                            "0", //tax
+                                                            "0", //discount
+                                                            "0", //fee_cal
+                                                            "0", // fee_shipping
+                                                            "order description", //order description
+                                                            dto.getUsername(), // buyer info
+                                                            "affiliate_code", //affiliate_code
+                                                            securePass
+                                                            ).getBytes())
+                            + "&cancel_url=" + cancelUrl;
+                }
+            } catch (Exception e) {
+                log.error("***** save cart: ", e);
             }
-        } catch (Exception e) {
-            log.error("***** save cart: ", e);
+        } else {
+            req.setAttribute("type", "review");
+            req.setAttribute("items", getItems(model));
+            req.setAttribute("orderTotal", model.getCartTotal());
+            return "cart";
         }
         log.debug("redirectURL: {}",redirectUrl);
         return "redirect:" + redirectUrl;
@@ -140,6 +147,7 @@ public class CartController {
                 OrderItemDto item = new OrderItemDto();
                 item.setProductCode(product[0]);
                 item.setQuantity(Integer.valueOf(product[1]));
+                item.setTotal(product[2]);
                 itemDtos.add(item);
             }
         }
