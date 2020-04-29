@@ -10,5 +10,6 @@
     <tiles:insertAttribute name="body" />
     <tiles:insertAttribute name="footer" />
     <tiles:insertAttribute name="modal" />
+    <tiles:insertAttribute name="liveChat" />
 </body>
 </html>

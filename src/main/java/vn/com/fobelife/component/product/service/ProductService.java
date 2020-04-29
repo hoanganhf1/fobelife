@@ -16,4 +16,5 @@ public interface ProductService {
     List<ProductDto> getByStatusAndType(String status, String type) throws Exception;
 
     ProductDto updateStatus(String code, String status) throws Exception;
+    ProductDto getByCode(String code) throws Exception;
 }

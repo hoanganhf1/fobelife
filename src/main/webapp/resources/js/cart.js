@@ -1,9 +1,9 @@
 
 function updateQuantity(productCode) {
-    var price = $('#' + productCode + '-price').text();
+    var price = $('#' + productCode + '-price').text().replace("đ", "").replace(".", "").trim();
     var quantity = $('#' + productCode + '-quantity').val();
     var linePrice = price * quantity;
-    $('#' + productCode + '-line-price').text(linePrice);
+    $('#' + productCode + '-line-price').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(linePrice));
     $('#' + productCode + '-order').val(productCode + ' ' + quantity + ' ' + linePrice);
     recalculateCart();
 }
@@ -14,26 +14,25 @@ function recalculateCart() {
         var res = $(this).val().split(' ');
         total += parseFloat(res[2]);
     });
-    $('#cart-total').html(total);
+    $('#cart-total').html(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total));
     $('.cart-total').val(total);
     if (total > 0) {
-        $('#cart-review').prop('disabled', false);
+        $('#checkout-cart').prop('disabled', false);
     } else {
-        $('#cart-review').prop('disabled', true);
+        $('#checkout-cart').prop('disabled', true);
     }
 }
 
-function formatMoney(n) {
-    return n.toFixed(0).replace(/./g, function(c, i, a) {
-        return i > 0 && c !== "." && (a.length - i) % 3 === 0 ? "," + c : c;
-    });
-}
-
 function reviewCart() {
-    $('#cartTable > tbody > tr').each(function(index, tr) {
-        var linePrice = $(this).find('.product-line-price').text();
-        if (linePrice > 0) {
-            
+
+    $('#cartReviewTable > tbody').empty();
+    $('#cartTable > tbody > tr').each(function() {
+        var linePrice = $(this).find('.product-line-price').text().replace("đ", "").replace(".", "").trim();
+        if (parseFloat(linePrice) > 0) {
+            var row = $(this).clone();
+            $('#cartReviewTable > tbody').append(row);
         }
     });
+
+    return false;
 }

@@ -117,4 +117,10 @@ public class ProductServiceImpl implements ProductService {
         reader.close();
 
     }
+
+    @Override
+    public ProductDto getByCode(String code) throws Exception {
+        Product product = proRepo.findByCode(code);
+        return applyDto(product);
+    }
 }

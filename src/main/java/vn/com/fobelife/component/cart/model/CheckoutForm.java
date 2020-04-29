@@ -9,5 +9,5 @@ public class CheckoutForm {
 
     private String[] productOrder;
     private String cartTotal;
-    private String type;
+    private String paymentType;
 }
