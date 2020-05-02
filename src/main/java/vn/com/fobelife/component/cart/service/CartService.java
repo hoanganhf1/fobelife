@@ -4,6 +4,7 @@ import java.util.List;
 
 import vn.com.fobelife.component.cart.dto.OrderDto;
 import vn.com.fobelife.component.cart.dto.OrderReturnDto;
+import vn.com.fobelife.component.cart.dto.OrderStatus;
 
 public interface CartService {
 
@@ -14,6 +15,6 @@ public interface CartService {
     OrderDto updateOrder(OrderReturnDto dto) throws Exception;
 
     List<OrderDto> getHistory(String username) throws Exception;
-    
-    OrderDto deliverOrder(Long id) throws Exception;
+
+    OrderDto updateStatus(Long id, OrderStatus status) throws Exception;
 }

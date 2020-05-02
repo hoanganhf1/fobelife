@@ -29,6 +29,5 @@
 
 
 <link rel="stylesheet" href="/resources/css/main.css">
-<link rel="stylesheet" href="/resources/css/fonts.css">
 <script src="/resources/js/main.js"></script>
 

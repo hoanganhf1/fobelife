@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import vn.com.fobelife.component.cart.dto.OrderDto;
 import vn.com.fobelife.component.cart.dto.OrderItemDto;
 import vn.com.fobelife.component.cart.dto.OrderReturnDto;
+import vn.com.fobelife.component.cart.dto.OrderStatus;
 import vn.com.fobelife.component.cart.entity.Order;
 import vn.com.fobelife.component.cart.entity.OrderItem;
 import vn.com.fobelife.component.cart.repository.OrderItemRepository;
@@ -58,10 +59,11 @@ public class CartServiceImpl implements CartService {
     public OrderDto createOrder(OrderDto dto) throws Exception {
         Order order = new Order();
         order.setUsername(dto.getUsername());
-        order.setStatus(dto.getStatus());
+        order.setStatus(dto.getStatus().name());
         order.setTotal(dto.getTotal());
         order.setTransactionInfo(UUID.randomUUID().toString());
         order.setType(dto.getType());
+        order.setNote(dto.getNote());
         order = orderRepo.save(order);
         order.setCode(String.format("%s_%s", order.getUsername(), order.getId()));
         order = orderRepo.save(order);
@@ -117,9 +119,11 @@ public class CartServiceImpl implements CartService {
         dto.setId(entity.getId());
         dto.setCode(entity.getCode());
         dto.setUsername(entity.getUsername());
-        dto.setStatus(buildStatus(entity.getStatus()));
+        dto.setStatus(OrderStatus.valueOf(entity.getStatus()));
+        dto.setStatusDesc(dto.getStatus().getDescription());
         dto.setTotal(entity.getTotal());
         dto.setType(entity.getType());
+        dto.setNote(entity.getNote());
         dto.setTransactionInfo(entity.getTransactionInfo());
         if (entity.getItems() != null) {
             String itemsAsString = StringUtils.EMPTY;
@@ -130,19 +134,6 @@ public class CartServiceImpl implements CartService {
         }
         dto.setCreatedDate(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").format(entity.getCreatedDate()));
         return dto;
-    }
-
-    private String buildStatus(String status) {
-        switch (status) {
-        case "ORDERED":
-            return "Đặt hàng";
-        case "DELIVERED":
-            return "Giao hàng";
-        case "PAIED":
-            return "Thanh toán";
-        default:
-            return StringUtils.EMPTY;
-        }
     }
 
     @Override
@@ -160,9 +151,9 @@ public class CartServiceImpl implements CartService {
 
     @Override
     @Transactional(readOnly = false)
-    public OrderDto deliverOrder(Long id) throws Exception {
+    public OrderDto updateStatus(Long id, OrderStatus status) throws Exception {
         Order order = orderRepo.findById(id).get();
-        order.setStatus("DELIVERED");
+        order.setStatus(status.name());
         order = orderRepo.save(order);
         return applyOrderDto(order);
     }
@@ -192,7 +183,7 @@ public class CartServiceImpl implements CartService {
         dto.setTotal("0");
         dto.setItems(getItems(productCode));
         dto.setType("GIFT");
-        dto.setStatus("ORDERED");
+        dto.setStatus(OrderStatus.ORDERED);
         dto.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         dto = createOrder(dto);
         return dto;

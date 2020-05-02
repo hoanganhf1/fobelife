@@ -13,12 +13,14 @@
 
 .product-price {
     float: left;
-    width: 12%;
+    width: 100%;
+    text-align: right;
 }
 
 .product-quantity {
     float: left;
-    width: 10%;
+    width: 100%;
+    text-align: center;
 }
 
 .product-removal {
@@ -28,7 +30,7 @@
 
 .product-line-price {
     float: left;
-    width: 12%;
+    width: 100%;
     text-align: right;
 }
 

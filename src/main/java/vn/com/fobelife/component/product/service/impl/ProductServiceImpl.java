@@ -49,6 +49,7 @@ public class ProductServiceImpl implements ProductService {
         dto.setPrice(entity.getPrice());
         dto.setType(entity.getType());
         dto.setStatus(entity.getStatus().trim());
+        dto.setStep(entity.getStep() != null ? entity.getStep() : 1);
         return dto;
     }
 
@@ -111,6 +112,7 @@ public class ProductServiceImpl implements ProductService {
             product.setDescription(model.getDescription());
             product.setPrice(model.getPrice());
             product.setType(model.getType());
+            product.setStep(model.getStep());
             product = proRepo.save(product);
 
         }

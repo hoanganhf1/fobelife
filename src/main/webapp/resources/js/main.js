@@ -15,10 +15,16 @@ $(document).ready(function() {
     });
 });
 
-function deliverOrder(orderId) {
+function updateStatus(orderId, status) {
     $.ajax({
         method : "PUT",
-        url : "/api/cart/deliver/" + orderId
+        contentType: "application/json",
+        dataType: 'json',
+        data: JSON.stringify({
+            orderId: orderId,
+            status: status
+        }),
+        url : "/api/cart/status"
     }).done(function(rep) {
         window.location.href = "/cart/history";
     });

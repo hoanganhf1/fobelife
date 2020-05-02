@@ -1,3 +1,4 @@
+<%@ include file="/WEB-INF/views/layouts/tagLibs.jsp"%>
 <!-- Load Facebook SDK for JavaScript -->
 <div id="fb-root"></div>
 <script>
@@ -20,5 +21,6 @@
 </script>
 
 <!-- Your customer chat code -->
-<div class="fb-customerchat" attribution=setup_tool page_id="124946514902169" logged_in_greeting="Xin chào! Fobelife có thể giúp gì được cho khách hàng"
-    logged_out_greeting="Xin chào! Fobelife có thể giúp gì được cho khách hàng"></div>
+<div class="fb-customerchat" attribution=setup_tool page_id="124946514902169"
+ logged_in_greeting="<spring:message code="liveChat.logged.in.greeting" />"
+    logged_out_greeting="<spring:message code="liveChat.logged.out.greeting" />"></div>

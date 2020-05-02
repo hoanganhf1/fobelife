@@ -3,6 +3,7 @@
 <script type="text/javascript">
     $(document).ready(function() {
         applyDataTable('#cartTable', 500);
+        $('#note').val($('#note').val().trim());
     });
 </script>
 <div class="main fadeInDown">
@@ -11,7 +12,7 @@
             <div class="product">
                 <table id="cartTable" class="table table-striped table-bordered" style="width: 100%">
                     <thead>
-                        <tr>
+                        <tr style="text-align: center;">
                             <th><spring:message code="label.product.code" /></th>
                             <c:if test="${fn:contains(mProduct.pageType, 'fobelife')}">
                                 <th><spring:message code="label.product.image" /></th>
@@ -35,18 +36,18 @@
                                         <p class="product-description">${product.description}</p>
                                     </div>
                                 </td>
-                                <td><div id="${product.code }-price" class="product-price" style="width: 150px;">
+                                <td><div id="${product.code }-price" class="product-price">
                                         <fmt:setLocale value="vi_VN" />
                                         <fmt:formatNumber value="${product.price}" type="currency" />
                                     </div></td>
 
                                 <td>
-                                    <div class="product-quantity" style="width: 80px">
-                                        <input id="${product.code }-quantity" type="number" value="${product.quantity }" min="0" onchange="return updateQuantity('${product.code }')">
+                                    <div class="product-quantity">
+                                        <input id="${product.code }-quantity" type="number" value="${product.quantity }" min="0" step="${product.step}" onchange="return updateQuantity('${product.code }')">
                                     </div>
                                 </td>
                                 <td>
-                                    <div id="${product.code }-line-price" class="product-line-price" style="width: 100px">
+                                    <div id="${product.code }-line-price" class="product-line-price" >
                                         <fmt:setLocale value="vi_VN" />
                                         <fmt:formatNumber value="${product.total }" type="currency" />
                                     </div>
@@ -92,6 +93,14 @@
                         <label><spring:message code="label.checkout.visa.gop" /></label>
                         <div class="totals-value">
                             <input style="margin-left: -0.8rem;" value="VISA-GOP" type="radio" class="form-check-input" name="paymentType">
+                        </div>
+                    </div>
+                </div>
+                <div class="totals">
+                    <div class="totals-item totals-item-total">
+                        <label><spring:message code="label.checkout.note" /></label>
+                        <div class="totals-value">
+                            <textarea name="note" id="note"></textarea>
                         </div>
                     </div>
                 </div>

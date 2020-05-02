@@ -36,10 +36,10 @@ public class Product extends BaseEntity {
     @Column(name = "NAME")
     private String name;
 
-    @Column(name = "DESCRIPTION")
+    @Column(name = "DESCRIPTION", length = 2000)
     private String description;
 
-    @Column(name = "IMAGE")
+    @Column(name = "IMAGE", length = 2000)
     private String image;
 
     @Column(name = "PRICE")
@@ -50,4 +50,7 @@ public class Product extends BaseEntity {
 
     @Column(name = "STATUS")
     private String status;
+
+    @Column(name = "STEP")
+    private Integer step;
 }

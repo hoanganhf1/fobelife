@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
 import vn.com.fobelife.component.cart.dto.OrderDto;
 import vn.com.fobelife.component.cart.dto.OrderItemDto;
+import vn.com.fobelife.component.cart.dto.OrderStatus;
 import vn.com.fobelife.component.cart.model.CheckoutForm;
 import vn.com.fobelife.component.cart.service.CartService;
 
@@ -57,8 +58,14 @@ public class CartController {
     @Value("${nganluong.secure.pass}")
     private String securePass;
 
+    @GetMapping
+    public String getCart(HttpServletRequest req, HttpServletResponse rep) {
+        log.info("***** Cart {} *****");
+        return "redirect:/cart/fobelife";
+    }
+
     @GetMapping("/{type}")
-    public String getCart(@PathVariable String type, HttpServletRequest req, HttpServletResponse rep) {
+    public String getCartType(@PathVariable String type, HttpServletRequest req, HttpServletResponse rep) {
         log.info("***** Cart {} *****", type);
         if ("gift".equalsIgnoreCase(type)) {
             return "redirect:/gift";
@@ -83,8 +90,9 @@ public class CartController {
                 dto.setTotal(model.getCartTotal());
                 dto.setItems(getItems(model));
                 dto.setType(model.getPaymentType());
-                dto.setStatus("ORDERED");
+                dto.setStatus(OrderStatus.ORDERED);
                 dto.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+                dto.setNote(model.getNote());
                 dto = cartService.createOrder(dto);
                 if ("visa".equalsIgnoreCase(model.getPaymentType())) {
     

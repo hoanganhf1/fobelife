@@ -24,4 +24,6 @@ public class ProductDto {
     private Integer quantity = 0;
 
     private String total = "0";
+
+    private Integer step;
 }

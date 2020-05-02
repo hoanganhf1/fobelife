@@ -64,6 +64,9 @@ public class Order extends BaseEntity {
     @Column(name="PRICE")
     private Integer price;
 
+    @Column(name="NOTE", length = 2000)
+    private String note;
+
     @OneToMany(mappedBy = "order")
     private List<OrderItem> items;
 }

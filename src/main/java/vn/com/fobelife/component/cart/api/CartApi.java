@@ -8,12 +8,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
 import vn.com.fobelife.common.api.ResultInfo;
 import vn.com.fobelife.component.cart.dto.OrderDto;
+import vn.com.fobelife.component.cart.model.StatusUpdateModel;
 import vn.com.fobelife.component.cart.service.CartService;
 
 /**
@@ -28,13 +30,13 @@ public class CartApi {
     @Autowired
     private CartService service;
 
-    @PutMapping("/deliver/{id}")
-    public ResponseEntity<ResultInfo> deliverOrder(@PathVariable Long id) {
+    @PutMapping("/status")
+    public ResponseEntity<ResultInfo> updateStatus(@RequestBody StatusUpdateModel model) {
         OrderDto data = null;
         String status = "SUCCESS";
         String message = "Updated status.";
         try {
-            data = service.deliverOrder(id);
+            data = service.updateStatus(model.getOrderId(), model.getStatus());
         } catch (Exception e) {
             status = "FAILED";
             message = e.getMessage();

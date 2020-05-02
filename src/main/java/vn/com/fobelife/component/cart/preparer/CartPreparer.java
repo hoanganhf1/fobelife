@@ -39,12 +39,16 @@ public class CartPreparer extends AbstractViewPreparer {
             String type = String.valueOf(req.getAttribute("type"));
             List<ProductDto> data = new ArrayList<>();
             if ("review".equalsIgnoreCase(type)) {
-                List<OrderItemDto> items = (List<OrderItemDto>)req.getAttribute("items");
-                for (OrderItemDto i : items) {
-                    ProductDto p = proService.getByCode(i.getProductCode());
-                    p.setQuantity(i.getQuantity());
-                    p.setTotal(i.getTotal());
-                    data.add(p);
+                Object oItems = req.getAttribute("items");
+                if (oItems != null && oItems instanceof List) {
+                    List<?> items = (List<?>)oItems;
+                    for (Object i : items) {
+                        OrderItemDto oI = (OrderItemDto)i;
+                        ProductDto p = proService.getByCode(oI.getProductCode());
+                        p.setQuantity(oI.getQuantity());
+                        p.setTotal(oI.getTotal());
+                        data.add(p);
+                    }
                 }
                 model.setTotal(String.valueOf(req.getAttribute("orderTotal")));
             } else {

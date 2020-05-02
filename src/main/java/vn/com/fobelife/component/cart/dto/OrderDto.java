@@ -12,11 +12,13 @@ public class OrderDto {
     private Long id;
     private String code;
     private String type;
-    private String status;
+    private OrderStatus status;
+    private String statusDesc;
     private String username;
     private String total;
     private String transactionInfo;
     private List<OrderItemDto> items;
     private String itemsAsString;
     private String createdDate;
+    private String note;
 }
