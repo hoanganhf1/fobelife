@@ -1,6 +1,6 @@
 
 function updateQuantity(productCode) {
-    var price = $('#' + productCode + '-price').text().replace("đ", "").replace(".", "").trim();
+    var price = $('#' + productCode + '-price').text().trim().split(" ")[0].replace(".", "");
     var quantity = $('#' + productCode + '-quantity').val();
     var linePrice = price * quantity;
     $('#' + productCode + '-line-price').text(new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(linePrice));
@@ -27,7 +27,7 @@ function reviewCart() {
 
     $('#cartReviewTable > tbody').empty();
     $('#cartTable > tbody > tr').each(function() {
-        var linePrice = $(this).find('.product-line-price').text().replace("đ", "").replace(".", "").trim();
+        var linePrice = $(this).find('.product-line-price').text().trim().split(" ")[0].replace(".", "");
         if (parseFloat(linePrice) > 0) {
             var row = $(this).clone();
             $('#cartReviewTable > tbody').append(row);

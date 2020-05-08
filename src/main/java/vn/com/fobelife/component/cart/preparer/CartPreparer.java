@@ -19,6 +19,7 @@ import vn.com.fobelife.component.cart.dto.OrderItemDto;
 import vn.com.fobelife.component.product.controller.model.ProductModel;
 import vn.com.fobelife.component.product.dto.ProductDto;
 import vn.com.fobelife.component.product.service.ProductService;
+import vn.com.fobelife.component.user.service.UserService;
 
 /**
  * @author ahuynh
@@ -30,6 +31,9 @@ public class CartPreparer extends AbstractViewPreparer {
 
     @Autowired
     private ProductService proService;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public void execute(Request tilesContext, AttributeContext attributeContext) {
@@ -56,6 +60,7 @@ public class CartPreparer extends AbstractViewPreparer {
             }
             model.setPageType(type);
             model.setData(data);
+            model.setPoint(userService.getCurrent().getPoint());
             req.setAttribute("currentPage", type);
         } catch (Exception e) {
             log.error("***** ProductPreparer:", e);

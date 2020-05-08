@@ -8,6 +8,14 @@
 </script>
 <div class="main fadeInDown">
     <div class="shopping-cart container" style=" margin-top: -100px; ">
+        <c:if test="${currentPage eq 'gift'}">
+            <div>
+                <h5>
+                    <spring:message code="label.gift.point.title" />
+                    ${mProduct.point}
+                </h5>
+            </div>
+        </c:if>
         <form action="/cart" method="post">
             <div class="product">
                 <table id="cartTable" class="table table-striped table-bordered" style="width: 100%">

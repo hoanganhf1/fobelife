@@ -67,9 +67,6 @@ public class CartController {
     @GetMapping("/{type}")
     public String getCartType(@PathVariable String type, HttpServletRequest req, HttpServletResponse rep) {
         log.info("***** Cart {} *****", type);
-        if ("gift".equalsIgnoreCase(type)) {
-            return "redirect:/gift";
-        }
         req.setAttribute("type", type);
         return "cart";
     }
