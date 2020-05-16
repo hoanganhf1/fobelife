@@ -3,7 +3,9 @@
 <script type="text/javascript">
     $(document).ready(function() {
         applyDataTable('#cartTable', 500);
-        $('#note').val($('#note').val().trim());
+        if ($('#note').val()) {
+            $('#note').val($('#note').val().trim());
+        }
     });
 </script>
 <div class="main fadeInDown">
@@ -45,8 +47,7 @@
                                     </div>
                                 </td>
                                 <td><div id="${product.code }-price" class="product-price">
-                                        <fmt:setLocale value="vi_VN" />
-                                        <fmt:formatNumber value="${product.price}" type="currency" />
+                                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="VND" />
                                     </div></td>
 
                                 <td>
@@ -56,8 +57,7 @@
                                 </td>
                                 <td>
                                     <div id="${product.code }-line-price" class="product-line-price" >
-                                        <fmt:setLocale value="vi_VN" />
-                                        <fmt:formatNumber value="${product.total }" type="currency" />
+                                        <fmt:formatNumber value="${product.total }" type="currency" currencySymbol="VND"/>
                                     </div>
                                 </td>
                             </tr>
@@ -73,8 +73,7 @@
                 <div class="totals-item totals-item-total">
                     <label><spring:message code="label.product.grand.total" /></label>
                     <div class="totals-value" id="cart-total">
-                        <fmt:setLocale value="vi_VN" />
-                        <fmt:formatNumber value="${mProduct.total}" type="currency" />
+                        <fmt:formatNumber value="${mProduct.total}" type="currency" currencySymbol="VND"/>
                     </div>
                     <input type="hidden" class="cart-total" name="cartTotal" value="${mProduct.total}">
                 </div>

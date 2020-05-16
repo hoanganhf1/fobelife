@@ -27,6 +27,7 @@
 <script src="//cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
 <script src="https://cdn.datatables.net/fixedcolumns/3.3.0/js/dataTables.fixedColumns.min.js"></script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
 
 <link rel="stylesheet" href="/resources/css/main.css">
 <script src="/resources/js/main.js"></script>

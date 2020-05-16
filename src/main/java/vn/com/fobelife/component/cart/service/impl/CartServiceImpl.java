@@ -170,7 +170,7 @@ public class CartServiceImpl implements CartService {
         order.setSecureCode(dto.getSecureCode());
         order.setTokenNl(dto.getTokenNl());
         if (StringUtils.isBlank(dto.getErrorText())) {
-            order.setStatus("PAIED");
+            order.setStatus("PAID");
         }
         order = orderRepo.save(order);
         return applyOrderDto(order);

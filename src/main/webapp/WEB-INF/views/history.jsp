@@ -33,8 +33,7 @@
                         </c:if>
                         <td>${history.itemsAsString }</td>
                         <td><div style=" text-align: right; ">
-                            <fmt:setLocale value="vi_VN" />
-                            <fmt:formatNumber value="${history.total }" type="currency" />
+                            <fmt:formatNumber value="${history.total }" type="currency" currencySymbol="VND" />
                             </div>
                         </td>
                         <td>${history.type }</td>
