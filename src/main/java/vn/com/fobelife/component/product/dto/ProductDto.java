@@ -26,4 +26,7 @@ public class ProductDto {
     private String total = "0";
 
     private Integer step;
+
+    private Integer bonus;
+
 }

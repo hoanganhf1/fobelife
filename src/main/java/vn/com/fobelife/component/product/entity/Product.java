@@ -53,4 +53,7 @@ public class Product extends BaseEntity {
 
     @Column(name = "STEP")
     private Integer step;
+
+    @Column(name = "BONUS")
+    private Integer bonus;
 }

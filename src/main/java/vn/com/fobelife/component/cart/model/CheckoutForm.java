@@ -11,4 +11,5 @@ public class CheckoutForm {
     private String cartTotal;
     private String paymentType;
     private String note;
+    private Integer pointUsed;
 }

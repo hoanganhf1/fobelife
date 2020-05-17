@@ -90,6 +90,7 @@ public class CartController {
                 dto.setStatus(OrderStatus.ORDERED);
                 dto.setUsername(SecurityContextHolder.getContext().getAuthentication().getName());
                 dto.setNote(model.getNote());
+                dto.setPoint(model.getPointUsed());
                 dto = cartService.createOrder(dto);
                 if ("visa".equalsIgnoreCase(model.getPaymentType())) {
     
@@ -135,6 +136,7 @@ public class CartController {
                 log.error("***** save cart: ", e);
             }
         } else {
+            req.setAttribute("point", model.getPointUsed());
             req.setAttribute("type", "review");
             req.setAttribute("items", getItems(model));
             req.setAttribute("orderTotal", model.getCartTotal());

@@ -119,6 +119,10 @@ label {
     width: 40px;
 }
 
+.product .product-point input {
+    width: 40px;
+}
+
 .product .remove-product {
     border: 0;
     padding: 4px 8px;

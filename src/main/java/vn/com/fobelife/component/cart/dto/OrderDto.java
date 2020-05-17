@@ -21,4 +21,5 @@ public class OrderDto {
     private String itemsAsString;
     private String createdDate;
     private String note;
+    private Integer point;
 }

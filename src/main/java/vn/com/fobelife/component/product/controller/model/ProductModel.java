@@ -16,4 +16,5 @@ public class ProductModel {
     private List<ProductDto> data;
     private String total = "0";
     private Integer point;
+    private Integer pointUsed;
 }

@@ -32,7 +32,7 @@ public class TrainingPreparer extends AbstractViewPreparer {
             model.setData(data);
             model.setNumberOfPassed(trainingService.countResult(Boolean.TRUE));
             model.setNumberOfFailed(trainingService.countResult(Boolean.FALSE));
-            model.setNumberOfAvailable(data.size() - model.getNumberOfPassed() - model.getNumberOfFailed());
+            model.setNumberOfAvailable(model.getNumberOfFailed());
         } catch (Exception e) {
             log.error("***** TrainingPreparer: ", e);
         }

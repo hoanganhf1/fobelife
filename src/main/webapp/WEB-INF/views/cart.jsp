@@ -14,11 +14,16 @@
             <div>
                 <h5>
                     <spring:message code="label.gift.point.title" />
-                    ${mProduct.point}
+                    <span class="total-point">${mProduct.point}</span>
+                </h5>
+                <h5>
+                    <spring:message code="label.gift.point.used" />
+                    <span class="total-point-used">0</span>
                 </h5>
             </div>
         </c:if>
         <form action="/cart" method="post">
+            <input type="hidden" id="pointUsed" name="pointUsed" value="${mProduct.pointUsed }">
             <div class="product">
                 <table id="cartTable" class="table table-striped table-bordered" style="width: 100%">
                     <thead>
@@ -30,6 +35,9 @@
                             <th><spring:message code="label.product.name" /></th>
                             <th><spring:message code="label.product.price" /></th>
                             <th><spring:message code="label.product.quantity" /></th>
+                            <c:if test="${currentPage eq 'gift'}">
+                            <th><spring:message code="label.product.bonus" /></th>
+                            </c:if>
                             <th><spring:message code="label.product.total" /></th>
                         </tr>
                     </thead>
@@ -49,12 +57,18 @@
                                 <td><div id="${product.code }-price" class="product-price">
                                         <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="VND" />
                                     </div></td>
-
                                 <td>
                                     <div class="product-quantity">
                                         <input id="${product.code }-quantity" type="number" value="${product.quantity }" min="0" step="${product.step}" onchange="return updateQuantity('${product.code }')">
                                     </div>
                                 </td>
+                                <c:if test="${currentPage eq 'gift'}">
+                                <td>
+                                    <div class="product-point">
+                                        <input id="${product.code }-point" type="number" value="0" min="0" onchange="return updateBonus('${product.code }', '${product.bonus }')">
+                                    </div>
+                                </td>
+                                </c:if>
                                 <td>
                                     <div id="${product.code }-line-price" class="product-line-price" >
                                         <fmt:formatNumber value="${product.total }" type="currency" currencySymbol="VND"/>

@@ -32,7 +32,7 @@
                             </c:if>
                             <div class="custom-control custom-radio ${oClass}">
                                 <input type="radio" id="${option.code}" value="${option.code}" name="${question.code}" class="custom-control-input"
-                                    ${not empty question.userAnswer ? 'disabled' : '' } ${question.userAnswer eq option.code ? 'checked' : '' }>
+                                    ${question.userAnswer eq question.answer ? 'disabled' : '' } ${question.userAnswer eq option.code ? 'checked' : '' }>
                                 <label class="custom-control-label" for="${option.code}">${option.content }</label>
                             </div>
                         </c:forEach>

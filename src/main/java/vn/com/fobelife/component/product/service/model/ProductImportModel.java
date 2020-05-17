@@ -15,6 +15,7 @@ public class ProductImportModel {
     private String description;
     private String status;
     private Integer step;
+    private Integer bonus;
 
     public ProductImportModel(String[] properties) {
         this.code = properties[0];
@@ -25,6 +26,7 @@ public class ProductImportModel {
         this.type = properties[5].toUpperCase();
         this.status = properties[6].toLowerCase();
         this.step = NumberUtils.toInt(properties[7]);
+        this.bonus = NumberUtils.toInt(properties[8]);
     }
 
 }

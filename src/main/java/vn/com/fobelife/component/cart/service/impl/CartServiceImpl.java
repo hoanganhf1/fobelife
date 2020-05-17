@@ -69,7 +69,7 @@ public class CartServiceImpl implements CartService {
         order = orderRepo.save(order);
 
         String emailMessage = "Chi tiết đơn hàng của quý khách như sau:\r\n\r\n";
-        int total = 0;
+
         for (OrderItemDto itemDto : dto.getItems()) {
             Product product = productRepo.findByCode(itemDto.getProductCode());
             OrderItem orderItem = new OrderItem();
@@ -83,14 +83,10 @@ public class CartServiceImpl implements CartService {
             orderItem = orderItemRepo.save(orderItem);
             emailMessage += orderItem.getQuantity() + " x " + product.getCode() + ": " + orderItem.getProductName()
                     + "\r\n";
-            total += product.getPrice();
         }
-        if ("GIFT".equalsIgnoreCase(dto.getType())) {
+        if (dto.getPoint() > 0) {
             User user = userRepo.findByUsername(dto.getUsername());
-            if (total > user.getPoint()) {
-                throw new Exception("Số điểm của bạn không đủ để nhận quà!");
-            }
-            user.setPoint(user.getPoint() - total);
+            user.setPoint(user.getPoint() - dto.getPoint());
             userRepo.save(user);
         }
         emailMessage += "\r\nTổng cộng: " + order.getTotal() + " vnd";

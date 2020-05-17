@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.request.Request;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +62,7 @@ public class CartPreparer extends AbstractViewPreparer {
             model.setPageType(type);
             model.setData(data);
             model.setPoint(userService.getCurrent().getPoint());
+            model.setPointUsed(NumberUtils.toInt(String.valueOf(req.getAttribute("point"))));
             req.setAttribute("currentPage", type);
         } catch (Exception e) {
             log.error("***** ProductPreparer:", e);

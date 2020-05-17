@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.opencsv.CSVReader;
 
+import lombok.extern.slf4j.Slf4j;
 import vn.com.fobelife.component.product.dto.ProductDto;
 import vn.com.fobelife.component.product.entity.Product;
 import vn.com.fobelife.component.product.repository.ProductRepository;
@@ -21,6 +22,7 @@ import vn.com.fobelife.component.product.service.model.ProductImportModel;
 
 @Service
 @Transactional(readOnly = true)
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
@@ -50,6 +52,7 @@ public class ProductServiceImpl implements ProductService {
         dto.setType(entity.getType());
         dto.setStatus(entity.getStatus().trim());
         dto.setStep(entity.getStep() != null ? entity.getStep() : 1);
+        dto.setBonus(entity.getBonus() != null ? entity.getBonus() : 0);
         return dto;
     }
 
@@ -101,20 +104,24 @@ public class ProductServiceImpl implements ProductService {
                 continue;
             }
             ProductImportModel model = new ProductImportModel(line);
-            Product product = proRepo.findByCode(model.getCode());
-            if (product == null) {
-                product = new Product();
-                product.setCode(model.getCode());
+            try {
+                Product product = proRepo.findByCode(model.getCode());
+                if (product == null) {
+                    product = new Product();
+                    product.setCode(model.getCode());
+                }
+                product.setStatus(model.getStatus());
+                product.setImage(model.getImage());
+                product.setName(model.getName());
+                product.setDescription(model.getDescription());
+                product.setPrice(model.getPrice());
+                product.setType(model.getType());
+                product.setStep(model.getStep());
+                product.setBonus(model.getBonus());
+                product = proRepo.save(product);
+            } catch (Exception e) {
+                log.error("Save product {}", model.getCode(), e);
             }
-            product.setStatus(model.getStatus());
-            product.setImage(model.getImage());
-            product.setName(model.getName());
-            product.setDescription(model.getDescription());
-            product.setPrice(model.getPrice());
-            product.setType(model.getType());
-            product.setStep(model.getStep());
-            product = proRepo.save(product);
-
         }
         reader.close();
 
