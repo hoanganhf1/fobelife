@@ -1,12 +1,12 @@
 
 function updateQuantity(productCode, discount) {
-    var price = $('#' + productCode + '-price').text().trim().split(" ")[0].replace(".", "");
+    var price = $('#' + productCode + '-price').text().trim().replace(".", "").replace(",", "");
     var quantity = $('#' + productCode + '-quantity').val();
     var linePrice = price * quantity;
     if (discount) {
         linePrice -= discount;
     }
-    $('#' + productCode + '-line-price').text(numeral(linePrice).format("0,0") + " VND");
+    $('#' + productCode + '-line-price').text(numeral(linePrice).format("0,0"));
     $('#' + productCode + '-order').val(productCode + ' ' + quantity + ' ' + linePrice);
     recalculateCart();
 }
@@ -17,7 +17,7 @@ function recalculateCart() {
         var res = $(this).val().split(' ');
         total += parseFloat(res[2]);
     });
-    $('#cart-total').html(numeral(total).format("0,0") + " VND");
+    $('#cart-total').html(numeral(total).format("0,0"));
     $('.cart-total').val(total);
     if (total > 0) {
         $('#checkout-cart').prop('disabled', false);

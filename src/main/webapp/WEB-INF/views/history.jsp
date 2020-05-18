@@ -33,7 +33,7 @@
                         </c:if>
                         <td>${history.itemsAsString }</td>
                         <td><div style=" text-align: right; ">
-                            <fmt:formatNumber value="${history.total }" type="currency" currencySymbol="VND" />
+                            <fmt:formatNumber value="${history.total }" type="currency" currencySymbol="" />
                             </div>
                         </td>
                         <td>${history.type }</td>

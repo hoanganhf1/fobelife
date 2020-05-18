@@ -55,7 +55,7 @@
                                     </div>
                                 </td>
                                 <td><div id="${product.code }-price" class="product-price">
-                                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="VND" />
+                                        <fmt:formatNumber value="${product.price}" type="currency" currencySymbol="" />
                                     </div></td>
                                 <td>
                                     <div class="product-quantity">
@@ -71,7 +71,7 @@
                                 </c:if>
                                 <td>
                                     <div id="${product.code }-line-price" class="product-line-price" >
-                                        <fmt:formatNumber value="${product.total }" type="currency" currencySymbol="VND"/>
+                                        <fmt:formatNumber value="${product.total }" type="currency" currencySymbol=""/>
                                     </div>
                                 </td>
                             </tr>
@@ -87,7 +87,7 @@
                 <div class="totals-item totals-item-total">
                     <label><spring:message code="label.product.grand.total" /></label>
                     <div class="totals-value" id="cart-total">
-                        <fmt:formatNumber value="${mProduct.total}" type="currency" currencySymbol="VND"/>
+                        <fmt:formatNumber value="${mProduct.total}" type="currency" currencySymbol=""/>
                     </div>
                     <input type="hidden" class="cart-total" name="cartTotal" value="${mProduct.total}">
                 </div>
