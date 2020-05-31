@@ -121,13 +121,20 @@ public class CartServiceImpl implements CartService {
         dto.setType(entity.getType());
         dto.setNote(entity.getNote());
         dto.setTransactionInfo(entity.getTransactionInfo());
+        List<OrderItemDto> items = new ArrayList<>();
         if (entity.getItems() != null) {
             String itemsAsString = StringUtils.EMPTY;
             for (OrderItem item : entity.getItems()) {
                 itemsAsString += item.getQuantity().toString() + " x " + item.getProductName() + "<br>";
+                OrderItemDto i = new OrderItemDto();
+                i.setProductCode(item.getProductCode());
+                i.setQuantity(item.getQuantity());
+                i.setTotal(String.valueOf(item.getTotal()));
+                items.add(i);
             }
             dto.setItemsAsString(itemsAsString);
         }
+        dto.setItems(items);
         dto.setCreatedDate(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").format(entity.getCreatedDate()));
         return dto;
     }

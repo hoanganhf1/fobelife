@@ -17,5 +17,5 @@ public interface TrainingService {
 
     void submitTraining(List<String> answerCodes) throws Exception;
 
-    Integer countResult(Boolean result) throws Exception;
+    Integer countResult(String courseCode, Boolean result) throws Exception;
 }

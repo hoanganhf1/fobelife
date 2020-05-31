@@ -11,10 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,6 +25,7 @@ import vn.com.fobelife.component.cart.dto.OrderItemDto;
 import vn.com.fobelife.component.cart.dto.OrderStatus;
 import vn.com.fobelife.component.cart.model.CheckoutForm;
 import vn.com.fobelife.component.cart.service.CartService;
+import vn.com.fobelife.component.cart.service.NganLuongService;
 
 /**
  * @author ahuynh
@@ -39,24 +38,9 @@ public class CartController {
 
     @Autowired
     private CartService cartService;
-
-    @Value("${nganluong.url}")
-    private String nganluongUrl;
-
-    @Value("${nganluong.merchant.sitecode}")
-    private String merchantSiteCode;
-
-    @Value("${fobelife.return.url}")
-    private String returnUrl;
-
-    @Value("${fobelife.cancel.url}")
-    private String cancelUrl;
-
-    @Value("${fobelife.email}")
-    private String receiver;
-
-    @Value("${nganluong.secure.pass}")
-    private String securePass;
+    
+    @Autowired
+    private NganLuongService nganluong;
 
     @GetMapping
     public String getCart(HttpServletRequest req, HttpServletResponse rep) {
@@ -93,44 +77,9 @@ public class CartController {
                 dto.setPoint(model.getPointUsed());
                 dto = cartService.createOrder(dto);
                 if ("visa".equalsIgnoreCase(model.getPaymentType())) {
-    
-                    redirectUrl = nganluongUrl 
-                            + "?merchant_site_code=" + merchantSiteCode 
-                            + "&return_url=" + returnUrl 
-                            + "&receiver=" + receiver
-                            + "&transaction_info=" + dto.getTransactionInfo()
-                            + "&order_code=" + dto.getCode()
-                            + "&price=" + dto.getTotal()
-                            + "&currency=vnd"
-                            + "&quantity=1"
-                            + "&tax=0"
-                            + "&discount=0"
-                            + "&fee_cal=0"
-                            + "&fee_shipping=0"
-                            + "&order_description=order description"
-                            + "&buyer_info=" + dto.getUsername()
-                            + "&affiliate_code=affiliate_code"
-                            + "&lang=vi"
-                            + "&secure_code=" + DigestUtils.md5DigestAsHex(
-                                                    String.join(StringUtils.SPACE, 
-                                                            merchantSiteCode,
-                                                            returnUrl,
-                                                            receiver,
-                                                            dto.getTransactionInfo(),
-                                                            dto.getCode(),
-                                                            dto.getTotal(),
-                                                            "vnd", // currency
-                                                            "1", //quantity
-                                                            "0", //tax
-                                                            "0", //discount
-                                                            "0", //fee_cal
-                                                            "0", // fee_shipping
-                                                            "order description", //order description
-                                                            dto.getUsername(), // buyer info
-                                                            "affiliate_code", //affiliate_code
-                                                            securePass
-                                                            ).getBytes())
-                            + "&cancel_url=" + cancelUrl;
+                    redirectUrl = nganluong.checkoutVisa(dto);
+                } else if ("VISA-INSTALLMENT".equalsIgnoreCase(model.getPaymentType())) {
+                    redirectUrl = nganluong.checkoutInstallment(dto);
                 }
             } catch (Exception e) {
                 log.error("***** save cart: ", e);

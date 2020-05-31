@@ -16,7 +16,6 @@
                     <h5 class="mb-0">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapse${question.code}" aria-expanded="true"
                             aria-controls="collapseOne">${question.content}</button>
-                        <!--                         <span id="answer" class="btn btn-link" style="float: right;">A</span> -->
                     </h5>
                 </div>
 

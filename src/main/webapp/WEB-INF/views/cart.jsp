@@ -113,7 +113,7 @@
                     <div class="totals-item totals-item-total">
                         <label><spring:message code="label.checkout.visa.gop" /></label>
                         <div class="totals-value">
-                            <input style="margin-left: -0.8rem;" value="VISA-GOP" type="radio" class="form-check-input" name="paymentType">
+                            <input style="margin-left: -0.8rem;" value="VISA-INSTALLMENT" type="radio" class="form-check-input" name="paymentType">
                         </div>
                     </div>
                 </div>
