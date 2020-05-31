@@ -39,7 +39,7 @@
                 </div>
             </div>
         </c:forEach>
-        <c:if test="${mTraining.numberOfAvailable > 0 }">
+        <c:if test="${mTraining.numberOfFailed > 0 }">
             <button class="btn btn-success" style="margin-top: 50px; float: right;">
                 <spring:message code="btn.training.submit" />
             </button>
