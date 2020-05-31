@@ -161,10 +161,12 @@ public class TrainingServiceImpl implements TrainingService {
     }
 
     @Override
-    public Integer countResult(Boolean result) throws Exception {
+    public Integer countResult(String courseCode, Boolean result) throws Exception {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        Course course = courseRepo.findByCode(courseCode).get();
+        List<Question> questions = qRepo.findByStatusAndCourse("ACTIVE", course);
         User user = userRepo.findByUsername(username);
-        List<UserQuestion> uqList = uqRepo.findByUserAndPassed(user, result);
+        List<UserQuestion> uqList = uqRepo.findByUserAndPassedAndQuestionIn(user, result, questions);
         return uqList.size();
     }
 

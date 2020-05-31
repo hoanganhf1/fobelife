@@ -13,5 +13,5 @@ public interface UserQuestionRepository extends CrudRepository<UserQuestion, Lon
 
     Optional<UserQuestion> findByUserAndQuestion(User user, Question question);
 
-    List<UserQuestion> findByUserAndPassed(User user, Boolean passed);
+    List<UserQuestion> findByUserAndPassedAndQuestionIn(User user, Boolean passed, List<Question> questions);
 }

@@ -27,12 +27,13 @@ public class TrainingPreparer extends AbstractViewPreparer {
         try {
             HttpServletRequest req = getServletRequest(tilesContext);
             TrainingModel model = getModel(req, TrainingModel.NAME, TrainingModel.class);
-            List<QuestionDto> data = trainingService.getByCurrentUser(String.valueOf(req.getAttribute("courseCode")));
+            String courseCode = String.valueOf(req.getAttribute("courseCode"));
+            List<QuestionDto> data = trainingService.getByCurrentUser(courseCode);
             req.setAttribute("currentPage", "training");
             model.setData(data);
-            model.setNumberOfPassed(trainingService.countResult(Boolean.TRUE));
-            model.setNumberOfFailed(trainingService.countResult(Boolean.FALSE));
-            model.setNumberOfAvailable(model.getNumberOfFailed());
+            model.setNumberOfPassed(trainingService.countResult(courseCode, Boolean.TRUE));
+            model.setNumberOfFailed(trainingService.countResult(courseCode, Boolean.FALSE));
+            model.setNumberOfAvailable(data.size() - model.getNumberOfFailed() - model.getNumberOfPassed());
         } catch (Exception e) {
             log.error("***** TrainingPreparer: ", e);
         }
