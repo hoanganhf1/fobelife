@@ -1,27 +1,30 @@
 package vn.com.fobelife.component.cart.service.impl;
 
 import java.security.KeyFactory;
-import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.client.RestTemplate;
 
+import lombok.extern.slf4j.Slf4j;
 import vn.com.fobelife.component.cart.dto.OrderDto;
 import vn.com.fobelife.component.cart.service.NganLuongService;
 
 @Service
 @Transactional(readOnly = false)
+@Slf4j
 public class NganLuongServiceImpl implements NganLuongService {
 
     @Value("${nganluong.url}")
@@ -53,6 +56,7 @@ public class NganLuongServiceImpl implements NganLuongService {
 
     @Value("${nganluong.alepay.checksum}")
     private String alepayChecksum;
+
 
     @Override
     public String checkoutVisa(OrderDto dto) throws Exception {
@@ -103,14 +107,21 @@ public class NganLuongServiceImpl implements NganLuongService {
         reqData.put("token", alepayToken);
 
         JSONObject data = buildData(order);
-        String encryptData = new String(encrypt(data));
+        String encryptData = publicEncrypt(data.toString(), alepayEncrypt);
         reqData.put("data", encryptData);
         reqData.put("checksum", DigestUtils.md5DigestAsHex((encryptData + alepayChecksum).getBytes()));
 
-
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> request = 
+                new HttpEntity<String>(reqData.toString(), headers);
         RestTemplate restTemplate = new RestTemplate();
-        JSONObject result = restTemplate.postForObject(alepayUrl + "/checkout/v1/request-order", data, JSONObject.class);
-        return String.valueOf(result.get("checkoutUrl"));
+        String response = restTemplate.postForObject(alepayUrl + "/checkout/v1/request-order", request, String.class);
+        JSONObject result = new JSONObject(response);
+        String decryptData = publicDecrypt(result.getString("data"), alepayEncrypt);
+        JSONObject repData = new JSONObject(decryptData);
+        return String.valueOf(repData.get("checkoutUrl"));
+
     }
 
     private JSONObject buildData(OrderDto order) {
@@ -119,16 +130,134 @@ public class NganLuongServiceImpl implements NganLuongService {
         data.put("amount", order.getTotal());
         data.put("currency", "VND");
         data.put("orderDescription", "order description");
-        data.put("totalItem", order.getItems().size());
+        data.put("totalItem", order.getTotalItem());
         data.put("returnUrl", returnUrl);
+        data.put("cancelUrl", cancelUrl);
+        data.put("buyerName", "Fobelife");
+        data.put("buyerEmail", receiver);
+        data.put("buyerPhone", "0943686963");
+        data.put("buyerAddress", "buyerAddress");
+        data.put("buyerCity", "HCM");
+        data.put("buyerCountry", "VN");
+        data.put("checkoutType", 2);
+        data.put("month", 12);
         return data;
     }
 
-    private byte[] encrypt(JSONObject data) throws Exception {
-        PublicKey publicKey = KeyFactory.getInstance("RSA")
-                .generatePublic(new X509EncodedKeySpec(Base64.getDecoder().decode(alepayEncrypt)));
-        Cipher cipher = Cipher.getInstance("RSA/ECB/NoPadding");
-        cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-        return cipher.doFinal(data.toString().getBytes());
+    private static String publicEncrypt(String plainText, String publicKey) {
+        try {
+            if (plainText == null) {
+                return null;
+            }
+
+            byte[] keyBytes = Base64.getDecoder().decode(publicKey);
+            KeyFactory factory = KeyFactory.getInstance("RSA");
+            RSAPublicKey key = (RSAPublicKey) factory.generatePublic(new X509EncodedKeySpec(keyBytes));
+
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+
+            byte[] plainTextBytes = plainText.getBytes("UTF-8");
+            byte[] cipherBytes = new byte[0];
+
+            int length = plainTextBytes.length;
+            int offset = 0;
+            while (offset < length) {
+
+                int block_size;
+                if (length - offset < 117) {
+                    block_size = length - offset;
+                } else {
+                    block_size = 117;
+                }
+
+                byte[] block = new byte[block_size];
+                for (int i = 0; i < block_size; ++i) {
+                    block[i] = plainTextBytes[offset + i];
+                }
+
+                byte[] cipherBlock = cipher.doFinal(block);
+                cipherBytes = append(cipherBytes, cipherBlock);
+
+                offset += block_size;
+            }
+
+            String cipherText = Base64.getEncoder().encodeToString(cipherBytes);
+
+            return cipherText;
+        } catch (Exception ex) {
+            return null;
+        }
+    }
+
+ 
+    private static String publicDecrypt(String cipherText, String publicKey) {
+        try {
+            if (cipherText == null) {
+                return null;
+            }
+
+            byte[] keyBytes = Base64.getDecoder().decode(publicKey);
+
+            KeyFactory factory = KeyFactory.getInstance("RSA");
+            RSAPublicKey key = (RSAPublicKey) factory.generatePublic(new X509EncodedKeySpec(keyBytes));
+
+            Cipher cipher = Cipher.getInstance("RSA");
+            cipher.init(Cipher.DECRYPT_MODE, key);
+
+            byte[] cipherBytes = Base64.getDecoder().decode(cipherText);
+            String abc = new String(cipherBytes);
+            log.info(abc);
+            byte[] plainTextBytes = new byte[0];
+
+            int length = cipherBytes.length;
+            int offset = 0;
+            while (offset < length) {
+
+                int block_size;
+                if (length - offset < 128) {
+                    block_size = length - offset;
+                } else {
+                    block_size = 128;
+                }
+
+                byte[] block = new byte[block_size];
+                for (int i = 0; i < block_size; ++i) {
+                    block[i] = cipherBytes[offset + i];
+                }
+
+                byte[] plainTextBlock = cipher.doFinal(block);
+                plainTextBytes = append(plainTextBytes, plainTextBlock);
+
+                offset += block_size;
+            }
+
+            return new String(plainTextBytes, "UTF-8");
+        } catch (Exception ex) {
+            log.error("publicDecrypt: ", ex);
+            return null;
+        }
+    }
+
+    private static byte[] append(byte[] array1, byte[] array2) {
+
+        int len1 = array1.length;
+        int len2 = array2.length;
+        byte[] result = new byte[len1 + len2];
+
+        for (int i = 0; i < len1; ++i) {
+            result[i] = array1[i];
+        }
+
+        for (int i = 0; i < len2; ++i) {
+            result[i + len1] = array2[i];
+        }
+
+        return result;
+    }
+
+    @Override
+    public String decrypt(String encryptText) throws Exception {
+        return publicDecrypt(encryptText, alepayEncrypt);
     }
 }

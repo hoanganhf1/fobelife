@@ -7,18 +7,19 @@ import java.util.UUID;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.opencsv.CSVReader;
 
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import vn.com.fobelife.component.product.dto.ProductDto;
 import vn.com.fobelife.component.product.entity.Product;
 import vn.com.fobelife.component.product.repository.ProductRepository;
 import vn.com.fobelife.component.product.service.ProductService;
-import vn.com.fobelife.component.product.service.model.ProductImportModel;
 
 @Service
 @Transactional(readOnly = true)
@@ -131,5 +132,31 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto getByCode(String code) throws Exception {
         Product product = proRepo.findByCode(code);
         return applyDto(product);
+    }
+    
+    @Getter
+    protected class ProductImportModel {
+
+        private String code;
+        private String image;
+        private String name;
+        private String type;
+        private Integer price;
+        private String description;
+        private String status;
+        private Integer step;
+        private Integer bonus;
+
+        public ProductImportModel(String[] properties) {
+            this.code = properties[0];
+            this.image = properties[1];
+            this.name = properties[2];
+            this.description = properties[3];
+            this.price = NumberUtils.toInt(properties[4]);
+            this.type = properties[5].toUpperCase();
+            this.status = properties[6].toLowerCase();
+            this.step = NumberUtils.toInt(properties[7]);
+            this.bonus = NumberUtils.toInt(properties[8]);
+        }
     }
 }

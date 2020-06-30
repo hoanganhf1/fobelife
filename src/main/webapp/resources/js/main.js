@@ -80,6 +80,7 @@ function applyDataTable(tableId, scrollY) {
 //            { width: 200, targets: 0 }
 //        ],
 //        fixedColumns: true,
+        ordering: false,
         autoWidth: true
 
     });

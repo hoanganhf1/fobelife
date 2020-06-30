@@ -10,9 +10,9 @@ import lombok.Setter;
 public class OrderReturnDto {
 
     private String transactionInfo;
-    private int price;
-    private int paymentId;
-    private int paymentType;
+    private Integer price;
+    private Integer paymentId;
+    private Integer paymentType;
     private String errorText;
     private String secureCode;
     private String tokenNl;

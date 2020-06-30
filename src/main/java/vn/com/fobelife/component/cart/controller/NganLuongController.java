@@ -2,7 +2,9 @@ package vn.com.fobelife.component.cart.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.tiles.autotag.core.runtime.annotation.Parameter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +23,11 @@ public class NganLuongController {
     @Autowired
     private CartService cartService;
 
+
+
     @GetMapping("/return")
     public String returnFromNganLuong(HttpServletRequest req, HttpServletResponse rep, 
+            HttpSession session,
             @Parameter String transaction_info,
             @Parameter Integer price,
             @Parameter Integer payment_id,
@@ -30,20 +35,26 @@ public class NganLuongController {
             @Parameter String error_text,
             @Parameter String secure_code,
             @Parameter String token_nl,
-            @Parameter String order_code) {
+            @Parameter String order_code,
+            @Parameter String data) {
         log.info("Return from Ngan Luong");
         try {
-        OrderReturnDto dto = OrderReturnDto.builder()
-                .transactionInfo(transaction_info)
-                .price(price)
-                .paymentId(payment_id)
-                .paymentType(payment_type)
-                .errorText(error_text)
-                .secureCode(secure_code)
-                .tokenNl(token_nl)
-                .orderCode(order_code)
-                .build();
-        cartService.updateOrder(dto);
+
+            OrderReturnDto dto = OrderReturnDto.builder()
+                    .transactionInfo(transaction_info)
+                    .price(price)
+                    .paymentId(payment_id)
+                    .paymentType(payment_type)
+                    .errorText(error_text)
+                    .secureCode(secure_code)
+                    .tokenNl(token_nl)
+                    .orderCode(order_code)
+                    .build();
+            if (StringUtils.isNotBlank(data)) {
+                String orderCode = String.valueOf(session.getAttribute("orderCode"));
+                dto.setOrderCode(orderCode);
+            }
+            cartService.updateOrder(dto);
         } catch(Exception e) {
             log.error("Ngan luong return: ", e);
         }

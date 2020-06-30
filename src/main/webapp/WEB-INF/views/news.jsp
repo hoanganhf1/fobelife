@@ -7,15 +7,23 @@
 </script>
 <div class="main fadeInDown">
 
-    <div class="shopping-cart container"  style="padding-top: 50px;">
-        <table id="newsTable" class="table table-striped table-bordered" style="width: 100%">
-            <tbody>
-                <c:forEach items="${mNews.data}" var="news">
-                    <tr>
-                        <td><a href="/news/${news.code }">${news.name }</a></td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+    <div class="shopping-cart container" style="padding-top: 50px;">
+        <div style="text-align: center;">
+            <h1>${mNews.subject }</h1>
+        </div>
+        <br>
+
+        <c:forEach items="${mNews.contentList}" var="content">
+            <div>
+            <c:choose>
+                <c:when test="${fn:startsWith(content, 'http')}">
+                    <img alt="" src="${content }">
+                </c:when>
+                <c:otherwise>
+                    <span>${content}</span>
+                </c:otherwise>
+            </c:choose>
+            </div>
+        </c:forEach>
     </div>
 </div>
