@@ -44,13 +44,15 @@
                     <tbody>
                         <c:forEach items="${mProduct.data}" var="product">
                             <tr>
-                                <td><div class="product-code">${product.code }</div></td>
+                                <td><div class="product-code">
+                                <a href="/news/${product.code }">${product.code }</a>
+                                </div></td>
                                 <c:if test="${fn:contains(mProduct.pageType, 'fobelife')}">
                                     <td><img width="100px" src="${product.image}"></td>
                                 </c:if>
                                 <td>
                                     <div class="product-details">
-                                        <div class="product-title">${product.name}</div>
+                                        <div class="product-title"><a href="/news/${product.code }">${product.name}</a></div>
                                         <p class="product-description">${product.description}</p>
                                     </div>
                                 </td>

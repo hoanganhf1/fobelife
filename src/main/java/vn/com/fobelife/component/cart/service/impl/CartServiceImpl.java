@@ -1,11 +1,11 @@
 package vn.com.fobelife.component.cart.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
@@ -69,7 +69,7 @@ public class CartServiceImpl implements CartService {
         order = orderRepo.save(order);
 
         String emailMessage = "Chi tiết đơn hàng của quý khách như sau:\r\n\r\n";
-
+        Integer totalItem = 0;
         for (OrderItemDto itemDto : dto.getItems()) {
             Product product = productRepo.findByCode(itemDto.getProductCode());
             OrderItem orderItem = new OrderItem();
@@ -83,6 +83,7 @@ public class CartServiceImpl implements CartService {
             orderItem = orderItemRepo.save(orderItem);
             emailMessage += orderItem.getQuantity() + " x " + product.getCode() + ": " + orderItem.getProductName()
                     + "\r\n";
+            totalItem++;
         }
         if (dto.getPoint() > 0) {
             User user = userRepo.findByUsername(dto.getUsername());
@@ -91,7 +92,9 @@ public class CartServiceImpl implements CartService {
         }
         emailMessage += "\r\nTổng cộng: " + order.getTotal() + " vnd";
         sendEmail(order.getCode(), emailMessage);
-        return applyOrderDto(order);
+        dto = applyOrderDto(order);
+        dto.setTotalItem(totalItem);
+        return dto;
     }
 
     private void sendEmail(String code, String message) {
@@ -135,7 +138,7 @@ public class CartServiceImpl implements CartService {
             dto.setItemsAsString(itemsAsString);
         }
         dto.setItems(items);
-        dto.setCreatedDate(new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss").format(entity.getCreatedDate()));
+        dto.setCreatedDate(DateFormatUtils.format(entity.getCreatedDate(), "EEE, dd MMM yyyy HH:mm:ss"));
         return dto;
     }
 
@@ -166,12 +169,12 @@ public class CartServiceImpl implements CartService {
     public OrderDto updateOrder(OrderReturnDto dto) throws Exception {
         Order order = orderRepo.findByCode(dto.getOrderCode());
 
-        order.setPrice(dto.getPrice());
-        order.setPaymentId(dto.getPaymentId());
-        order.setPaymentType(dto.getPaymentType());
-        order.setErrorText(dto.getErrorText());
-        order.setSecureCode(dto.getSecureCode());
-        order.setTokenNl(dto.getTokenNl());
+        order.setPriceIfNotNull(dto.getPrice());
+        order.setPaymentIdIfNotNull(dto.getPaymentId());
+        order.setPaymentTypeIfNotNull(dto.getPaymentType());
+        order.setErrorTextIfNotNull(dto.getErrorText());
+        order.setSecureCodeIfNotNull(dto.getSecureCode());
+        order.setTokenNlIfNotNull(dto.getTokenNl());
         if (StringUtils.isBlank(dto.getErrorText())) {
             order.setStatus("PAID");
         }

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.opencsv.CSVReader;
 
+import lombok.Getter;
 import vn.com.fobelife.component.training.dto.CourseDto;
 import vn.com.fobelife.component.training.dto.OptionDto;
 import vn.com.fobelife.component.training.dto.QuestionDto;
@@ -23,8 +24,6 @@ import vn.com.fobelife.component.training.repository.CourseRepository;
 import vn.com.fobelife.component.training.repository.OptionRepository;
 import vn.com.fobelife.component.training.repository.QuestionRepository;
 import vn.com.fobelife.component.training.service.TrainingService;
-import vn.com.fobelife.component.training.service.model.CourseImportModel;
-import vn.com.fobelife.component.training.service.model.TrainingImportModel;
 import vn.com.fobelife.component.user.entity.User;
 import vn.com.fobelife.component.user.entity.UserQuestion;
 import vn.com.fobelife.component.user.repository.UserQuestionRepository;
@@ -183,4 +182,35 @@ public class TrainingServiceImpl implements TrainingService {
         return dtos;
     }
 
+    @Getter
+    protected class TrainingImportModel {
+
+        private String questionCode;
+        private String optionCode;
+        private String content;
+        private String anwser;
+        private String status;
+
+        public TrainingImportModel(String[] properties) {
+            this.questionCode = properties[0];
+            this.optionCode = properties[1];
+            this.content = properties[2];
+            this.anwser = properties[3];
+            this.status = properties[4];
+        }
+    }
+    
+    @Getter
+    protected class CourseImportModel {
+
+        private String code;
+        private String name;
+        private String status;
+
+        public CourseImportModel(String[] properties) {
+            this.code = properties[0];
+            this.name = properties[1];
+            this.status = properties[2];
+        }
+    }
 }

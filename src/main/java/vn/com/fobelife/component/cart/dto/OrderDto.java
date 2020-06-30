@@ -22,4 +22,5 @@ public class OrderDto {
     private String createdDate;
     private String note;
     private Integer point;
+    private Integer totalItem;
 }

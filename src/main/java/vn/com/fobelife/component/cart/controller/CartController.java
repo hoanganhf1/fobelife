@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +63,9 @@ public class CartController {
     }
 
     @PostMapping
-    public String checkout(@ModelAttribute CheckoutForm model, HttpServletRequest req, HttpServletResponse rep) {
+    public String checkout(@ModelAttribute CheckoutForm model, 
+            HttpServletRequest req, HttpServletResponse rep,
+            HttpSession session) {
         log.info("***** Check out *****");
         String redirectUrl = "/cart/history";
         if (StringUtils.isNotBlank(model.getPaymentType())) {
@@ -79,6 +82,7 @@ public class CartController {
                 if ("visa".equalsIgnoreCase(model.getPaymentType())) {
                     redirectUrl = nganluong.checkoutVisa(dto);
                 } else if ("VISA-INSTALLMENT".equalsIgnoreCase(model.getPaymentType())) {
+                    session.setAttribute("orderCode", dto.getCode());
                     redirectUrl = nganluong.checkoutInstallment(dto);
                 }
             } catch (Exception e) {

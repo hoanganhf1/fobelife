@@ -7,7 +7,6 @@
             <li class="nav-item ${currentPage eq 'management' ? 'active' : ''}"><a class="nav-link" href="/management"><spring:message code="label.menu.management" /></a></li>
         </sec:authorize>
         <li class="nav-item ${currentPage eq 'history' ? 'active' : ''}"><a class="nav-link" href="/cart/history"><spring:message code="label.menu.history" /></a></li>
-        <li class="nav-item ${currentPage eq 'news' ? 'active' : ''}"><a class="nav-link" href="/news"><spring:message code="label.menu.news" /></a></li>
         <li class="nav-item ${currentPage eq 'training' ? 'active' : ''}"><a class="nav-link" href="/training"><spring:message code="label.menu.training" /></a></li>
         <li class="nav-item ${currentPage eq 'gift' ? 'active' : ''}"><a class="nav-link" href="/cart/gift"><spring:message code="label.menu.gift" /></a></li>
         <li class="nav-item ${currentPage eq 'logout' ? 'active' : ''}"><a class="nav-link" href="/logout"><spring:message code="label.menu.logout" /></a></li>

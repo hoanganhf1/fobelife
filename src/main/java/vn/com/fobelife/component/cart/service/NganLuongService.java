@@ -6,4 +6,5 @@ public interface NganLuongService {
 
     String checkoutVisa(OrderDto order) throws Exception;
     String checkoutInstallment(OrderDto order) throws Exception;
+    String decrypt(String encryptText) throws Exception;
 }

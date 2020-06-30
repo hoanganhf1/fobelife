@@ -70,5 +70,8 @@
         <put-attribute name="body" value="/WEB-INF/views/management.jsp" />
     </definition>
 
-    <definition name="news" template="/WEB-INF/views/news.jsp" preparer="newsPreparer" />
+    <definition name="news" extends="base.definition" preparer="newsPreparer" >
+        <put-attribute name="title" value="Tin tức" />
+        <put-attribute name="body" value="/WEB-INF/views/news.jsp" />
+    </definition>
 </tiles-definitions> 
