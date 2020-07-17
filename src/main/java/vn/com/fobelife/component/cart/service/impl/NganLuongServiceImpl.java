@@ -118,7 +118,8 @@ public class NganLuongServiceImpl implements NganLuongService {
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.postForObject(alepayUrl + "/checkout/v1/request-order", request, String.class);
         JSONObject result = new JSONObject(response);
-        String decryptData = publicDecrypt(result.getString("data"), alepayEncrypt);
+        log.error("********* data: {}", result.get("data"));
+        String decryptData = publicDecrypt(result.get("data"), alepayEncrypt);
         JSONObject repData = new JSONObject(decryptData);
         return String.valueOf(repData.get("checkoutUrl"));
 
@@ -191,7 +192,7 @@ public class NganLuongServiceImpl implements NganLuongService {
     }
 
  
-    private static String publicDecrypt(String cipherText, String publicKey) {
+    private static String publicDecrypt(Object cipherText, String publicKey) {
         try {
             if (cipherText == null) {
                 return null;
@@ -205,7 +206,7 @@ public class NganLuongServiceImpl implements NganLuongService {
             Cipher cipher = Cipher.getInstance("RSA");
             cipher.init(Cipher.DECRYPT_MODE, key);
 
-            byte[] cipherBytes = Base64.getDecoder().decode(cipherText);
+            byte[] cipherBytes = Base64.getDecoder().decode(String.valueOf(cipherText));
             String abc = new String(cipherBytes);
             log.info(abc);
             byte[] plainTextBytes = new byte[0];
