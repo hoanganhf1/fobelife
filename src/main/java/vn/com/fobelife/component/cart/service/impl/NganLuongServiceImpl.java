@@ -97,6 +97,7 @@ public class NganLuongServiceImpl implements NganLuongService {
                                                 securePass
                                                 ).getBytes())
                 + "&cancel_url=" + cancelUrl;
+        log.info("redirectUrl: {}", redirectUrl);
         return redirectUrl;
     }
 
@@ -118,7 +119,10 @@ public class NganLuongServiceImpl implements NganLuongService {
         RestTemplate restTemplate = new RestTemplate();
         String response = restTemplate.postForObject(alepayUrl + "/checkout/v1/request-order", request, String.class);
         JSONObject result = new JSONObject(response);
-        log.error("********* data: {}", result.get("data"));
+        log.info("********* errorCode: {}", result.get("errorCode"));
+        log.info("********* errorDescription: {}", result.get("errorDescription"));
+        log.info("********* data: {}", result.get("data"));
+        
         String decryptData = publicDecrypt(result.get("data"), alepayEncrypt);
         JSONObject repData = new JSONObject(decryptData);
         return String.valueOf(repData.get("checkoutUrl"));
