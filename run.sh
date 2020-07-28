@@ -1,4 +1,4 @@
-
+export FOBELIFE_EMAIL=dong.nd@fobelife.com
 export DB_PASSWORD=F0b3life
 export DB_USERNAME=root
 export FOBELIFE_PAYMENT_CANCEL=http://vip.fobelife.com/nganluong/cancel
